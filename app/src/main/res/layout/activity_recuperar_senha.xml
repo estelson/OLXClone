@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".autenticacao.CriarContaActivity">
+    tools:context=".autenticacao.RecuperarSenhaActivity">
 
     <include
-        android:id="@+id/include2"
+        android:id="@+id/include3"
         layout="@layout/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,36 +20,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2">
+        app:layout_constraintTop_toBottomOf="@+id/include3">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="32dp">
+            android:padding="32dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nome"
+                android:text="Informe seu e-Mail cadastrado e você receberá um link para alterar a senha."
+                android:textAlignment="center"
                 android:textColor="@color/cor_roxa"/>
 
-            <EditText
-                android:id="@+id/edt_nome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="16dp"
-                android:background="@drawable/bg_edt"
-                android:hint="Nome"
-                android:drawableStart="@drawable/ic_user"
-                android:drawablePadding="8dp"/>
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="e-Mail"
+                android:layout_marginTop="32dp"
                 android:textColor="@color/cor_roxa"/>
 
             <EditText
@@ -57,53 +47,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:padding="16dp"
                 android:background="@drawable/bg_edt"
                 android:hint="e-Mail"
+                android:padding="16dp"
                 android:drawableStart="@drawable/ic_email"
-                android:drawablePadding="8dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Telefone"
-                android:textColor="@color/cor_roxa"/>
-
-            <EditText
-                android:id="@+id/edt_telefone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="16dp"
-                android:background="@drawable/bg_edt"
-                android:hint="Telefone"
-                android:drawableStart="@drawable/ic_telefone"
-                android:drawablePadding="8dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Senha"
-                android:textColor="@color/cor_roxa"/>
-
-            <EditText
-                android:id="@+id/edt_senha"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="16dp"
-                android:background="@drawable/bg_edt"
-                android:hint="Senha"
-                android:drawableStart="@drawable/ic_senha"
                 android:drawablePadding="8dp"/>
 
             <android.widget.Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Criar conta"
+                android:text="Recuperar senha"
                 android:textSize="18sp"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
@@ -113,10 +67,10 @@
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:visibility="gone"
                 tools:visibility="visible"
-                android:layout_gravity="center"
                 android:theme="@style/ProgressBar"/>
 
         </LinearLayout>

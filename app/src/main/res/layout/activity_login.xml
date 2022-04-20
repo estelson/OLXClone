@@ -57,7 +57,7 @@
                 android:background="@drawable/bg_btn"
                 android:layout_marginTop="16dp"
                 android:text="Entrar"
-                android:textSize="16dp"
+                android:textSize="18sp"
                 android:textColor="@android:color/white"
                 android:textAllCaps="false" />
 
