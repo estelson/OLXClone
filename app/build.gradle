@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.application'
-//    id 'com.google.gms.google-services'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -42,18 +42,22 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     // When using the BoM, you don't specify versions in Firebase library dependencies
-//    implementation platform('com.google.firebase:firebase-bom:29.3.0')
+    implementation platform('com.google.firebase:firebase-bom:29.3.0')
     // Declare the dependency for the Firebase Authentication library
-//    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-auth'
     // Declare the dependency for the Realtime Database library
-//    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-database'
     // Declare the dependency for the Cloud Storage library
-//    implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-storage'
 
     // https://github.com/ParkSangGwon/TedPermission  -  Possibilidade   de  adicionar  controle  de
     // permissões personalizadas ao app
-//    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0' // 2.2.3
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0' // 2.2.3
 
     // Image downloading and caching library for Android
-//    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Biblioteca que adiciona a função de SWIPE em uma lista
+    // https://github.com/tsuryo/Swipeable-RecyclerView
+    implementation 'com.github.tsuryo:Swipeable-RecyclerView:1.1'
 }
