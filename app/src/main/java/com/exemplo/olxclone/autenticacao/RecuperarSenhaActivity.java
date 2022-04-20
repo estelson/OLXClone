@@ -3,6 +3,7 @@ package com.exemplo.olxclone.autenticacao;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -51,7 +52,10 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
             if(task.isSuccessful()) {
                 Toast.makeText(this, "E-mail enviado com sucesso. Verifique sua caixa de entrada.", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Erro ao enviar o e-Mail. Motivo: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                Log.i("INFOTESTE", "logar: " + task.getException().getMessage());
+
+                String erro = FirebaseHelper.validaErros(task.getException().getMessage());
+                Toast.makeText(this, erro, Toast.LENGTH_LONG).show();
             }
 
             progressBar.setVisibility(View.GONE);

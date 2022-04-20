@@ -2,6 +2,7 @@ package com.exemplo.olxclone.autenticacao;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -64,7 +65,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 finish();
             } else {
-                Toast.makeText(this, "Erro ao efetuar login. Motivo: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                String erro = FirebaseHelper.validaErros(task.getException().getMessage());
+                Toast.makeText(this, erro, Toast.LENGTH_LONG).show();
             }
 
             progressBar.setVisibility(View.GONE);
