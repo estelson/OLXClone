@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.exemplo.olxclone.R;
@@ -22,6 +23,8 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recuperar_senha);
 
         iniciaComponentes();
+
+        configCliques();
     }
 
     public void validaDados(View view) {
@@ -37,6 +40,12 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
         }
     }
 
+    private void configCliques() {
+        findViewById(R.id.ib_voltar).setOnClickListener(v -> {
+            finish();
+        });
+    }
+
     private void enviarEmail(String email) {
         FirebaseHelper.getAuth().sendPasswordResetEmail(email).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
@@ -50,6 +59,9 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
     }
 
     private void iniciaComponentes() {
+        TextView text_toolbar = findViewById(R.id.text_toolbar);
+        text_toolbar.setText("Recuperação de senha");
+
         edt_email = findViewById(R.id.edt_email);
         progressBar = findViewById(R.id.progressBar);
     }

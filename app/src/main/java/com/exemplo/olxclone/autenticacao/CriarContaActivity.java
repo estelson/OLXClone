@@ -2,12 +2,15 @@ package com.exemplo.olxclone.autenticacao;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.exemplo.olxclone.MainActivity;
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Usuario;
@@ -27,6 +30,14 @@ public class CriarContaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_criar_conta);
 
         iniciaComponentes();
+
+        configCliques();
+    }
+
+    private void configCliques() {
+        findViewById(R.id.ib_voltar).setOnClickListener(v -> {
+            finish();
+        });
     }
 
     public void validaDados(View view) {
@@ -78,7 +89,9 @@ public class CriarContaActivity extends AppCompatActivity {
                 usuario.salvar();
 
                 // Redirecionar o usuário para a tela home do app
-                
+                startActivity(new Intent(this, MainActivity.class));
+
+                finish();
             } else {
                 Toast.makeText(this, "Erro ao gravar o usuário. Motivo: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -88,6 +101,9 @@ public class CriarContaActivity extends AppCompatActivity {
     }
 
     private void iniciaComponentes() {
+        TextView text_toolbar = findViewById(R.id.text_toolbar);
+        text_toolbar.setText("Criar conta");
+
         edt_nome = findViewById(R.id.edt_nome);
         edt_email = findViewById(R.id.edt_email);
         edt_telefone = findViewById(R.id.edt_telefone);

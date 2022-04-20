@@ -1,17 +1,19 @@
 package com.exemplo.olxclone.autenticacao;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.exemplo.olxclone.MainActivity;
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.helper.FirebaseHelper;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,8 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         String email = edt_email.getText().toString().trim();
         String senha = edt_senha.getText().toString().trim();
 
-        if(!email.isEmpty()) {
-            if(!senha.isEmpty()) {
+        if (!email.isEmpty()) {
+            if (!senha.isEmpty()) {
                 progressBar.setVisibility(View.VISIBLE);
 
                 logar(email, senha);
@@ -47,10 +49,20 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public void criarConta(View view) {
+        startActivity(new Intent(this, CriarContaActivity.class));
+    }
+
+    public void recuperarSenha(View view) {
+        startActivity(new Intent(this, RecuperarSenhaActivity.class));
+    }
+
     private void logar(String email, String senha) {
         FirebaseHelper.getAuth().signInWithEmailAndPassword(email, senha).addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                Toast.makeText(this, "Login efetuado com sucesso", Toast.LENGTH_SHORT).show();
+            if (task.isSuccessful()) {
+                startActivity(new Intent(this, MainActivity.class));
+
+                finish();
             } else {
                 Toast.makeText(this, "Erro ao efetuar login. Motivo: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }

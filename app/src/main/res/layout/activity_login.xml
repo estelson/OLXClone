@@ -76,7 +76,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Cadastre-se"
-                    android:textColor="@color/cor_roxa"/>
+                    android:textColor="@color/cor_roxa"
+                    android:onClick="criarConta"/>
 
                 <TextView
                     android:id="@+id/text_recuperar_senha"
@@ -85,7 +86,8 @@
                     android:layout_weight="1"
                     android:textAlignment="textEnd"
                     android:text="Esqueceu a senha?"
-                    android:textColor="@color/cor_roxa"/>
+                    android:textColor="@color/cor_roxa"
+                    android:onClick="recuperarSenha"/>
             </LinearLayout>
 
             <ProgressBar
