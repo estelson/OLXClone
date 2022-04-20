@@ -82,6 +82,8 @@ public class CriarContaActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Erro ao gravar o usuário. Motivo: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
+
+            progressBar.setVisibility(View.GONE);
         });
     }
 

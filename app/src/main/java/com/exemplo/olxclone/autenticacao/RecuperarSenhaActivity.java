@@ -28,6 +28,8 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
         String email = edt_email.getText().toString().trim();
 
         if(!email.isEmpty()) {
+            progressBar.setVisibility(View.VISIBLE);
+
             enviarEmail(email);
         } else {
             edt_email.requestFocus();
@@ -42,6 +44,8 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Erro ao enviar o e-Mail. Motivo: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
+
+            progressBar.setVisibility(View.GONE);
         });
     }
 

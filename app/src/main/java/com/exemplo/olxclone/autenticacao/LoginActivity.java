@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.exemplo.olxclone.R;
+import com.exemplo.olxclone.helper.FirebaseHelper;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,7 +34,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if(!email.isEmpty()) {
             if(!senha.isEmpty()) {
-                Toast.makeText(this, "Tudo certo", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.VISIBLE);
+
+                logar(email, senha);
             } else {
                 edt_senha.requestFocus();
                 edt_senha.setError("Informe sua senha");
@@ -41,6 +45,18 @@ public class LoginActivity extends AppCompatActivity {
             edt_email.requestFocus();
             edt_email.setError("Informe seu e-Mail");
         }
+    }
+
+    private void logar(String email, String senha) {
+        FirebaseHelper.getAuth().signInWithEmailAndPassword(email, senha).addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                Toast.makeText(this, "Login efetuado com sucesso", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Erro ao efetuar login. Motivo: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            progressBar.setVisibility(View.GONE);
+        });
     }
 
     private void iniciaComponentes() {
