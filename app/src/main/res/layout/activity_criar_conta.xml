@@ -56,6 +56,7 @@
                 android:id="@+id/edt_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
                 android:layout_marginTop="8dp"
                 android:padding="16dp"
                 android:background="@drawable/bg_edt"
@@ -93,11 +94,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:padding="16dp"
                 android:background="@drawable/bg_edt"
-                android:hint="Senha"
                 android:drawableStart="@drawable/ic_senha"
-                android:drawablePadding="8dp"/>
+                android:drawablePadding="8dp"
+                android:hint="Senha"
+                android:inputType="textPassword"
+                android:padding="16dp" />
 
             <android.widget.Button
                 android:layout_width="match_parent"
@@ -107,7 +109,8 @@
                 android:textSize="18sp"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                android:background="@drawable/bg_btn"/>
+                android:background="@drawable/bg_btn"
+                android:onClick="validaDados"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
