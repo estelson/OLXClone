@@ -11,10 +11,6 @@
         android:theme="@style/Theme.OLXClone">
         <activity
             android:name=".autenticacao.RecuperarSenhaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".autenticacao.CriarContaActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -23,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".autenticacao.CriarContaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".autenticacao.LoginActivity"
             android:exported="false"

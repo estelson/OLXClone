@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_edt"
+                android:inputType="textEmailAddress"
                 android:hint="e-Mail"
                 android:padding="16dp"
                 android:drawableStart="@drawable/ic_email"
@@ -61,7 +62,8 @@
                 android:textSize="18sp"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                android:background="@drawable/bg_btn"/>
+                android:background="@drawable/bg_btn"
+                android:onClick="validaDados"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
