@@ -31,7 +31,7 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
             enviarEmail(email);
         } else {
             edt_email.requestFocus();
-            edt_email.setError("Informe o e-Mail");
+            edt_email.setError("Informe seu e-Mail");
         }
     }
 
