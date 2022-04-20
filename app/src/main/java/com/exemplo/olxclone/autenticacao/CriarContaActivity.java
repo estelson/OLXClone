@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.exemplo.olxclone.R;
+import com.exemplo.olxclone.helper.FirebaseHelper;
+import com.exemplo.olxclone.model.Usuario;
 
 public class CriarContaActivity extends AppCompatActivity {
 
@@ -37,7 +39,15 @@ public class CriarContaActivity extends AppCompatActivity {
             if(!email.isEmpty()) {
                 if(!telefone.isEmpty()) {
                     if(!senha.isEmpty()) {
-                        Toast.makeText(this, "Tudo certo", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.VISIBLE);
+
+                        Usuario usuario = new Usuario();
+                        usuario.setNome(nome.trim());
+                        usuario.setEmail(email.trim());
+                        usuario.setTelefone(telefone.trim());
+                        usuario.setSenha(senha.trim());
+
+                        cadastrarUsuario(usuario);
                     } else {
                         edt_senha.requestFocus();
                         edt_senha.setError("Informe a senha");
@@ -54,6 +64,25 @@ public class CriarContaActivity extends AppCompatActivity {
             edt_nome.requestFocus();
             edt_nome.setError("Informe o nome");
         }
+    }
+
+    private void cadastrarUsuario(Usuario usuario) {
+        FirebaseHelper.getAuth().createUserWithEmailAndPassword(
+                usuario.getEmail(), usuario.getSenha()
+        ).addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                String id = task.getResult().getUser().getUid();
+
+                usuario.setId(id);
+
+                usuario.salvar();
+
+                // Redirecionar o usuário para a tela home do app
+                
+            } else {
+                Toast.makeText(this, "Erro ao gravar o usuário. Motivo: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void iniciaComponentes() {
