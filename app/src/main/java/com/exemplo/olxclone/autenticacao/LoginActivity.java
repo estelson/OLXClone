@@ -1,8 +1,10 @@
-package com.exemplo.olxclone;
+package com.exemplo.olxclone.autenticacao;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.exemplo.olxclone.R;
 
 public class LoginActivity extends AppCompatActivity {
 
