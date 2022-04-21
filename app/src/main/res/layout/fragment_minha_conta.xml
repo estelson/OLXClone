@@ -54,8 +54,10 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/text_conta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="Clique aqui"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
