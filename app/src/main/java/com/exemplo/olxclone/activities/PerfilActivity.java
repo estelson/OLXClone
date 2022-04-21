@@ -24,9 +24,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.santalu.maskara.widget.MaskEditText;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.List;
@@ -80,10 +83,38 @@ public class PerfilActivity extends AppCompatActivity {
         });
     }
 
+    private void salvarImagemPerfil() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        StorageReference storageReference = FirebaseHelper.getStorageReference()
+                .child("imagens")
+                .child("perfil")
+                .child(FirebaseHelper.getUidFirebase() + ".jpeg");
+
+        UploadTask uploadTask = storageReference.putFile(Uri.parse(caminhoImagem));
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            storageReference.getDownloadUrl().addOnCompleteListener(task -> {
+                String urlImagem = task.getResult().toString();
+                usuario.setImagemPerfil(urlImagem);
+
+                usuario.salvar(progressBar, "Imagem do perfil atualizada com sucesso", getBaseContext());
+
+                caminhoImagem = null;
+            });
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Erro ao atualizar imagem do perfil. Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        });
+    }
+
+
     private void configDados() {
         edt_nome.setText(usuario.getNome());
         edt_telefone.setText(usuario.getTelefone());
         edt_email.setText(usuario.getEmail());
+
+        if(usuario.getImagemPerfil() != null){
+            Picasso.get().load(usuario.getImagemPerfil()).into(imagem_perfil);
+        }
 
         progressBar.setVisibility(View.GONE);
     }
@@ -91,22 +122,22 @@ public class PerfilActivity extends AppCompatActivity {
     public void validaDados(View view) {
         String nome = edt_nome.getText().toString().trim();
         String telefone = edt_telefone.getUnMasked().trim();
-        String email = edt_email.getText().toString().trim();
 
         if(!nome.isEmpty()) {
             if(!telefone.isEmpty()) {
                 if(telefone.length() == 11) {
-                    Toast.makeText(this, "Tudo certo com o telefone", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    if(caminhoImagem != null) {
+                        salvarImagemPerfil();
+                    }
+
+                    usuario.setNome(nome);
+                    usuario.setTelefone(telefone);
+                    usuario.salvar(progressBar, "Perfil atualizado com sucesso", getBaseContext());
                 } else {
                     edt_telefone.requestFocus();
                     edt_telefone.setError("Telefone inválido");
-                }
-
-                if(!email.isEmpty()) {
-                    //
-                } else {
-                    edt_email.requestFocus();
-                    edt_email.setError("Informe o email");
                 }
             } else {
                 edt_telefone.requestFocus();

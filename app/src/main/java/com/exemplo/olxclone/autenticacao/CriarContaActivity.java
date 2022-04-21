@@ -86,7 +86,7 @@ public class CriarContaActivity extends AppCompatActivity {
 
                 usuario.setId(id);
 
-                usuario.salvar();
+                usuario.salvar(progressBar, "Usuário salvo com sucesso", getBaseContext());
 
                 // Redirecionar o usuário para a tela home do app
                 startActivity(new Intent(this, MainActivity.class));
