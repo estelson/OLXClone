@@ -1,5 +1,6 @@
 package com.exemplo.olxclone.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.exemplo.olxclone.R;
+import com.exemplo.olxclone.helper.FirebaseHelper;
+import com.exemplo.olxclone.model.Usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.santalu.maskara.widget.MaskEditText;
@@ -37,6 +44,8 @@ public class PerfilActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
+    private Usuario usuario;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +54,38 @@ public class PerfilActivity extends AppCompatActivity {
         iniciaComponentes();
 
         configCliques();
+
+        recuperaPerfil();
+    }
+
+    private void recuperaPerfil() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        DatabaseReference perfilRef = FirebaseHelper.getDatabaseReference()
+                .child("usuarios")
+                .child(FirebaseHelper.getUidFirebase());
+
+        perfilRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                usuario = snapshot.getValue(Usuario.class);
+
+                configDados();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void configDados() {
+        edt_nome.setText(usuario.getNome());
+        edt_telefone.setText(usuario.getTelefone());
+        edt_email.setText(usuario.getEmail());
+
+        progressBar.setVisibility(View.GONE);
     }
 
     public void validaDados(View view) {
