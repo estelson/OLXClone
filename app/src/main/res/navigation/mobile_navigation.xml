@@ -3,25 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/menu_home">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/menu_home"
         android:name="com.exemplo.olxclone.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+
     <fragment
-        android:id="@+id/meusAnunciosFragment"
+        android:id="@+id/menu_meus_anuncios"
         android:name="com.exemplo.olxclone.fragments.MeusAnunciosFragment"
         android:label="fragment_meus_anuncios"
         tools:layout="@layout/fragment_meus_anuncios" />
+
     <fragment
-        android:id="@+id/favoritosFragment"
+        android:id="@+id/menu_favoritos"
         android:name="com.exemplo.olxclone.fragments.FavoritosFragment"
         android:label="fragment_favoritos"
         tools:layout="@layout/fragment_favoritos" />
+
     <fragment
-        android:id="@+id/minhaContaFragment"
+        android:id="@+id/menu_minha_conta"
         android:name="com.exemplo.olxclone.fragments.MinhaContaFragment"
         android:label="fragment_minha_conta"
         tools:layout="@layout/fragment_minha_conta" />
