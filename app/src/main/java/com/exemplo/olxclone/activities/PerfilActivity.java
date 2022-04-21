@@ -112,11 +112,11 @@ public class PerfilActivity extends AppCompatActivity {
         edt_telefone.setText(usuario.getTelefone());
         edt_email.setText(usuario.getEmail());
 
+        progressBar.setVisibility(View.GONE);
+
         if(usuario.getImagemPerfil() != null){
             Picasso.get().load(usuario.getImagemPerfil()).into(imagem_perfil);
         }
-
-        progressBar.setVisibility(View.GONE);
     }
 
     public void validaDados(View view) {
