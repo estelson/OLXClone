@@ -111,7 +111,8 @@
                 android:textSize="18sp"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                android:background="@drawable/bg_btn"/>
+                android:background="@drawable/bg_btn"
+                android:onClick="validaDados"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"

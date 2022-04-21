@@ -9,12 +9,17 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.exemplo.olxclone.R;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
+import com.santalu.maskara.widget.MaskEditText;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,8 +29,13 @@ public class PerfilActivity extends AppCompatActivity {
     private static final int SELECAO_GALERIA = 100;
 
     private ImageView imagem_perfil;
-
     private String caminhoImagem;
+
+    private EditText edt_nome;
+    private MaskEditText edt_telefone;
+    private EditText edt_email;
+
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +45,36 @@ public class PerfilActivity extends AppCompatActivity {
         iniciaComponentes();
 
         configCliques();
+    }
+
+    public void validaDados(View view) {
+        String nome = edt_nome.getText().toString().trim();
+        String telefone = edt_telefone.getUnMasked().trim();
+        String email = edt_email.getText().toString().trim();
+
+        if(!nome.isEmpty()) {
+            if(!telefone.isEmpty()) {
+                if(telefone.length() == 11) {
+                    Toast.makeText(this, "Tudo certo com o telefone", Toast.LENGTH_SHORT).show();
+                } else {
+                    edt_telefone.requestFocus();
+                    edt_telefone.setError("Telefone inválido");
+                }
+
+                if(!email.isEmpty()) {
+                    //
+                } else {
+                    edt_email.requestFocus();
+                    edt_email.setError("Informe o email");
+                }
+            } else {
+                edt_telefone.requestFocus();
+                edt_telefone.setError("Informe o telefone");
+            }
+        } else {
+            edt_nome.requestFocus();
+            edt_nome.setError("Informe o nome");
+        }
     }
 
     private void configCliques() {
@@ -79,7 +119,16 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     private void iniciaComponentes() {
+        TextView text_toolbar = findViewById(R.id.text_toolbar);
+        text_toolbar.setText("Perfil");
+
         imagem_perfil = findViewById(R.id.imagem_perfil);
+
+        edt_nome = findViewById(R.id.edt_nome);
+        edt_telefone = findViewById(R.id.edt_telefone);
+        edt_email = findViewById(R.id.edt_email);        
+
+        progressBar = findViewById(R.id.progressBar);
     }
 
     @Override
