@@ -1,5 +1,10 @@
 package com.exemplo.olxclone.model;
 
+import android.content.Context;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.google.firebase.database.DatabaseReference;
 
@@ -13,12 +18,23 @@ public class Endereco {
     public Endereco() {
     }
 
-    public void salvar(String idUser) {
+    public void salvar(String idUser, Context context, ProgressBar progressBar) {
         DatabaseReference enderecoRef = FirebaseHelper.getDatabaseReference()
                 .child("enderecos")
                 .child(idUser);
 
-        enderecoRef.setValue(this);
+        enderecoRef.setValue(this).addOnCompleteListener(task -> {
+            String msg = "";
+            if(task.isSuccessful()) {
+                msg = "Endereço salvo com sucesso";
+            } else {
+                msg = "Erro ao salvar endereço. Motivo: " + task.getException().getMessage();
+            }
+
+            progressBar.setVisibility(View.GONE);
+
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+        });
     }
 
     public String getCep() {

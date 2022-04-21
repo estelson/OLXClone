@@ -7,11 +7,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Endereco;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 public class EnderecoActivity extends AppCompatActivity {
 
@@ -28,6 +33,8 @@ public class EnderecoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_endereco);
 
         iniciaComponentes();
+
+        recuperaEndereco();
     }
 
     public void validaDados(View view) {
@@ -40,15 +47,15 @@ public class EnderecoActivity extends AppCompatActivity {
             if(!uf.isEmpty()) {
                 if(!minicipio.isEmpty()) {
                     if(!bairro.isEmpty()) {
+                        progressBar.setVisibility(View.VISIBLE);
+
                         Endereco endereco = new Endereco();
                         endereco.setCep(cep);
                         endereco.setUf(uf);
                         endereco.setMinicipio(minicipio);
                         endereco.setBairro(bairro);
 
-                        endereco.salvar(FirebaseHelper.getUidFirebase());
-
-                        Toast.makeText(this, "Endereço salvo com sucesso", Toast.LENGTH_SHORT).show();
+                        endereco.salvar(FirebaseHelper.getUidFirebase(), getBaseContext(), progressBar);
                     } else {
                         edt_bairro.requestFocus();
                         edt_bairro.setError("Informe o bairro");
@@ -65,6 +72,43 @@ public class EnderecoActivity extends AppCompatActivity {
             edt_cep.requestFocus();
             edt_cep.setError("Informe o CEP");
         }
+    }
+
+    private void recuperaEndereco() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        DatabaseReference enderecoRef = FirebaseHelper.getDatabaseReference()
+                .child("enderecos")
+                .child(FirebaseHelper.getUidFirebase());
+
+        enderecoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    Endereco endereco = snapshot.getValue(Endereco.class);
+
+                    configEndereco(endereco);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+
+                    Toast.makeText(EnderecoActivity.this, "Nenhum endereço cadastrado", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void configEndereco(Endereco endereco) {
+        edt_cep.setText(endereco.getCep());
+        edt_uf.setText(endereco.getUf());
+        edt_municipio.setText(endereco.getMinicipio());
+        edt_bairro.setText(endereco.getBairro());
+
+        progressBar.setVisibility(View.GONE);
     }
 
     private void iniciaComponentes() {

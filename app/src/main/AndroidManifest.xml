@@ -11,10 +11,12 @@
         android:theme="@style/Theme.OLXClone">
         <activity
             android:name=".activities.EnderecoActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.PerfilActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".autenticacao.RecuperarSenhaActivity"
             android:exported="false"
