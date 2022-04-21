@@ -94,7 +94,7 @@
                     android:textColor="@color/cor_roxa"/>
 
                 <EditText
-                    android:id="@+id/edt_minicipio"
+                    android:id="@+id/edt_municipio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Cidade"
@@ -132,7 +132,8 @@
                 android:text="Salvar"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
-                android:background="@drawable/bg_btn"/>
+                android:background="@drawable/bg_btn"
+                android:onClick="validaDados"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
