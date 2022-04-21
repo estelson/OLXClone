@@ -27,6 +27,8 @@ public class EnderecoActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
+    private Endereco endereco;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,10 @@ public class EnderecoActivity extends AppCompatActivity {
                     if(!bairro.isEmpty()) {
                         progressBar.setVisibility(View.VISIBLE);
 
-                        Endereco endereco = new Endereco();
+                        if(endereco == null) {
+                            endereco = new Endereco();
+                        }
+                        
                         endereco.setCep(cep);
                         endereco.setUf(uf);
                         endereco.setMinicipio(minicipio);
@@ -85,7 +90,7 @@ public class EnderecoActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
-                    Endereco endereco = snapshot.getValue(Endereco.class);
+                    endereco = snapshot.getValue(Endereco.class);
 
                     configEndereco(endereco);
                 } else {
