@@ -40,11 +40,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    // Biblioteca que adiciona a função de SWIPE em uma lista
-    implementation 'com.github.tsuryo:Swipeable-RecyclerView:1.1'
-
     // Import the BoM for the Firebase platform
     // When using the BoM, you don't specify versions in Firebase library dependencies
+    // https://firebase.google.com
     implementation platform('com.google.firebase:firebase-bom:29.3.0')
     // Declare the dependency for the Firebase Authentication library
     implementation 'com.google.firebase:firebase-auth'
@@ -53,14 +51,23 @@ dependencies {
     // Declare the dependency for the Cloud Storage library
     implementation 'com.google.firebase:firebase-storage'
 
-    // https://github.com/ParkSangGwon/TedPermission  -  Possibilidade   de  adicionar  controle  de
-    // permissões personalizadas ao app
+    // Biblioteca que adiciona a função de SWIPE em uma lista
+    // https://github.com/tsuryo/Swipeable-RecyclerView
+    implementation 'com.github.tsuryo:Swipeable-RecyclerView:1.1'
+
+    // Possibilidade de adicionar controle de permissões personalizadas ao app
+    // https://github.com/ParkSangGwon/TedPermission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0' // 2.2.3
 
     // Image downloading and caching library for Android
+    // https://github.com/square/picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Biblioteca que adiciona a função de SWIPE em uma lista
     // https://github.com/tsuryo/Swipeable-RecyclerView
     implementation 'com.github.tsuryo:Swipeable-RecyclerView:1.1'
+
+    // Format text fields without getting affected by input filters
+    // https://github.com/santalu/maskara
+    implementation 'com.github.santalu:maskara:1.0.0'
 }

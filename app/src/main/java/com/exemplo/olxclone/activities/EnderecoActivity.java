@@ -26,7 +26,7 @@ public class EnderecoActivity extends AppCompatActivity {
     private EditText edt_bairro;
 
     private ProgressBar progressBar;
-
+    
     private Endereco endereco;
 
     @Override
@@ -54,7 +54,7 @@ public class EnderecoActivity extends AppCompatActivity {
                         if(endereco == null) {
                             endereco = new Endereco();
                         }
-                        
+
                         endereco.setCep(cep);
                         endereco.setUf(uf);
                         endereco.setMinicipio(minicipio);
