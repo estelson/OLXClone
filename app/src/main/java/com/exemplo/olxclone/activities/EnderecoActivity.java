@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.exemplo.olxclone.R;
+import com.exemplo.olxclone.helper.FirebaseHelper;
+import com.exemplo.olxclone.model.Endereco;
 
 public class EnderecoActivity extends AppCompatActivity {
 
@@ -38,7 +40,15 @@ public class EnderecoActivity extends AppCompatActivity {
             if(!uf.isEmpty()) {
                 if(!minicipio.isEmpty()) {
                     if(!bairro.isEmpty()) {
-                        Toast.makeText(this, "Tudo certo", Toast.LENGTH_SHORT).show();
+                        Endereco endereco = new Endereco();
+                        endereco.setCep(cep);
+                        endereco.setUf(uf);
+                        endereco.setMinicipio(minicipio);
+                        endereco.setBairro(bairro);
+
+                        endereco.salvar(FirebaseHelper.getUidFirebase());
+
+                        Toast.makeText(this, "Endereço salvo com sucesso", Toast.LENGTH_SHORT).show();
                     } else {
                         edt_bairro.requestFocus();
                         edt_bairro.setError("Informe o bairro");
