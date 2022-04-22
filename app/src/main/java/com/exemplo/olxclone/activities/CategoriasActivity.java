@@ -1,13 +1,23 @@
 package com.exemplo.olxclone.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.exemplo.olxclone.R;
+import com.exemplo.olxclone.adapter.AdapterCategoria;
+import com.exemplo.olxclone.helper.CategoriaList;
+import com.exemplo.olxclone.model.Categoria;
 
-public class CategoriasActivity extends AppCompatActivity {
+public class CategoriasActivity extends AppCompatActivity implements AdapterCategoria.OnClickListener {
+
+    private RecyclerView rv_categorias;
+    
+    private AdapterCategoria adapterCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +27,17 @@ public class CategoriasActivity extends AppCompatActivity {
         iniciaComponentes();
 
         configCliques();
+
+        iniciaRV();
+    }
+
+    private void iniciaRV() {
+        rv_categorias.setLayoutManager(new LinearLayoutManager(this));
+        rv_categorias.setHasFixedSize(true);
+        
+        adapterCategoria = new AdapterCategoria(CategoriaList.getList(false), this);
+
+        rv_categorias.setAdapter(adapterCategoria);
     }
 
     private void configCliques() {
@@ -28,6 +49,12 @@ public class CategoriasActivity extends AppCompatActivity {
     private void iniciaComponentes() {
         TextView text_toolbar = findViewById(R.id.text_toolbar);
         text_toolbar.setText("Categorias");
+
+        rv_categorias = findViewById(R.id.rv_categorias);
     }
 
+    @Override
+    public void OnClick(Categoria categoria) {
+        Toast.makeText(this, categoria.getNome(), Toast.LENGTH_SHORT).show();
+    }
 }
