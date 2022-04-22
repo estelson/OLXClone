@@ -1,18 +1,19 @@
 package com.exemplo.olxclone.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackcat.currencyedittext.CurrencyEditText;
 import com.exemplo.olxclone.R;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.santalu.maskara.widget.MaskEditText;
 
 import java.util.Locale;
 
@@ -34,9 +36,11 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
     private Button btn_categoria;
 
-    private EditText edt_cep;
+    private MaskEditText edt_cep;
 
     private String categoriaSelecionada = "";
+
+    private ProgressBar progressBar;
 
     private Endereco enderecoUsuario;
 
@@ -67,6 +71,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 enderecoUsuario = snapshot.getValue(Endereco.class);
                 edt_cep.setText(enderecoUsuario.getCep());
+
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -93,7 +99,14 @@ public class FormAnuncioActivity extends AppCompatActivity {
              */
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                Toast.makeText(FormAnuncioActivity.this, "Endereço recuperado", Toast.LENGTH_SHORT).show();
+                String cep = charSequence.toString().replaceAll("_", "").replace("-", "");
+                Log.i("INFOTESTE", "onTextChanged: " + cep);
+
+                if(cep.length() == 8) {
+                    buscarEndereco(cep);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -101,6 +114,10 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void buscarEndereco(String cep) {
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void iniciaComponentes() {
@@ -113,19 +130,21 @@ public class FormAnuncioActivity extends AppCompatActivity {
         edt_cep = findViewById(R.id.edt_cep);
 
         btn_categoria = findViewById(R.id.btn_categoria);
+
+        progressBar = findViewById(R.id.progressBar);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK) {
-            if(requestCode == REQUEST_CATEGORIA) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CATEGORIA) {
                 Categoria categoria = (Categoria) data.getSerializableExtra("categoriaSelecionada");
                 categoriaSelecionada = categoria.getNome();
 
                 btn_categoria.setText(categoriaSelecionada);
-            } else if(true) { // Controla a seleção de imagens da câmera
+            } else if (true) { // Controla a seleção de imagens da câmera
 
             } else { // Controla a seleção de imagens da galeria do dispositivo
 
