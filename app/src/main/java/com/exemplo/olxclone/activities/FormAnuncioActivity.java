@@ -2,6 +2,7 @@ package com.exemplo.olxclone.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -20,6 +21,10 @@ public class FormAnuncioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form_anuncio);
 
         iniciaComponentes();
+    }
+
+    public void selecionarCategoria(View view) {
+        startActivity(new Intent(this, CategoriasActivity.class));
     }
 
     private void iniciaComponentes() {
