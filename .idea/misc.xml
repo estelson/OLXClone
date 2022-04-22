@@ -5,8 +5,13 @@
       <map>
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/bg_btn.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/bg_edt.xml" value="0.229" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_agro_e_industria.xml" value="0.229" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_animais_de_estimacao.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_anuncio_off.xml" value="0.229" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_artigos_infantis.xml" value="0.229" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_autos_e_pecas.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_camera.xml" value="0.229" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_comercio_e_escritorio.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_email.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_favorito_off.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_menu.xml" value="0.229" />
@@ -27,6 +32,7 @@
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_main.xml" value="0.3528205128205128" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_perfil.xml" value="0.36041666666666666" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_recuperar_senha.xml" value="0.3528205128205128" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/categoria_item.xml" value="0.29783549783549784" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/divisor.xml" value="0.35833333333333334" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/fragment_favoritos.xml" value="0.3619791666666667" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/fragment_home.xml" value="0.35833333333333334" />
