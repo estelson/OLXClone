@@ -204,36 +204,49 @@
                 app:layout_constraintTop_toBottomOf="@+id/editText3" />
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5">
 
-                <com.santalu.maskara.widget.MaskEditText
-                    android:id="@+id/edt_cep"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    app:mask="_____-___"
-                    app:maskCharacter="_"
-                    app:maskStyle="completable"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_edt"
-                    android:hint="CEP"/>
+                    android:orientation="horizontal">
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
+                    <com.santalu.maskara.widget.MaskEditText
+                        android:id="@+id/edt_cep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_edt"
+                        android:hint="CEP"
+                        android:inputType="number"
+                        android:padding="16dp"
+                        app:mask="_____-___"
+                        app:maskCharacter="_"
+                        app:maskStyle="completable" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:theme="@style/ProgressBar" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_local"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/ProgressBar"
-                    android:layout_weight="2"/>
+                    tools:text="Brasília, Sobradinho - DDD 61" />
 
             </LinearLayout>
 

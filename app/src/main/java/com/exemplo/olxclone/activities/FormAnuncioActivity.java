@@ -17,9 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.blackcat.currencyedittext.CurrencyEditText;
 import com.exemplo.olxclone.R;
+import com.exemplo.olxclone.api.CEPService;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Categoria;
 import com.exemplo.olxclone.model.Endereco;
+import com.exemplo.olxclone.model.Local;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +29,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.santalu.maskara.widget.MaskEditText;
 
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FormAnuncioActivity extends AppCompatActivity {
 
@@ -37,10 +45,13 @@ public class FormAnuncioActivity extends AppCompatActivity {
     private Button btn_categoria;
 
     private MaskEditText edt_cep;
+    private Retrofit retrofit;
 
     private String categoriaSelecionada = "";
 
     private ProgressBar progressBar;
+
+    private TextView txt_local;
 
     private Endereco enderecoUsuario;
 
@@ -50,6 +61,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form_anuncio);
 
         iniciaComponentes();
+
+        iniciaRetrofit();
 
         recuperaEndereco();
     }
@@ -100,8 +113,6 @@ public class FormAnuncioActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 String cep = charSequence.toString().replaceAll("_", "").replace("-", "");
-                Log.i("INFOTESTE", "onTextChanged: " + cep);
-
                 if(cep.length() == 8) {
                     buscarEndereco(cep);
                 } else {
@@ -118,6 +129,27 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
     private void buscarEndereco(String cep) {
         progressBar.setVisibility(View.VISIBLE);
+
+        CEPService cepService = retrofit.create(CEPService.class);
+        Call<Local> call = cepService.recuperaCEP(cep);
+
+        call.enqueue(new Callback<Local>() {
+            @Override
+            public void onResponse(Call<Local> call, Response<Local> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Local> call, Throwable t) {
+                Toast.makeText(FormAnuncioActivity.this, "Serviço de busca de CEP indisponível.\nTente novamente mais tarde.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void iniciaRetrofit() {
+        retrofit = new Retrofit.Builder().baseUrl("https://viacep.com.br/ws/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
     }
 
     private void iniciaComponentes() {
@@ -132,6 +164,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
         btn_categoria = findViewById(R.id.btn_categoria);
 
         progressBar = findViewById(R.id.progressBar);
+
+        txt_local = findViewById(R.id.txt_local);
     }
 
     @Override
