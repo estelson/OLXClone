@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +56,11 @@ public class CategoriasActivity extends AppCompatActivity implements AdapterCate
 
     @Override
     public void OnClick(Categoria categoria) {
-        Toast.makeText(this, categoria.getNome(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra("categoriaSelecionada", categoria);
+
+        setResult(RESULT_OK, intent);
+
+        finish();
     }
 }

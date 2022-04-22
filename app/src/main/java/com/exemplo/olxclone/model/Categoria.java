@@ -1,6 +1,8 @@
 package com.exemplo.olxclone.model;
 
-public class Categoria {
+import java.io.Serializable;
+
+public class Categoria implements Serializable {
 
     private int caminho;
     private String nome;
