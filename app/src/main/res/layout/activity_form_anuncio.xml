@@ -122,15 +122,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editText" />
 
-            <EditText
-                android:id="@+id/editText2"
+            <com.blackcat.currencyedittext.CurrencyEditText
+                android:id="@+id/edit_valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:background="@drawable/bg_edt"
-                android:hint="R$ 0,00"
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +144,7 @@
                 android:text="Categoria"
                 android:textColor="@color/cor_roxa"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText2"/>
+                app:layout_constraintTop_toBottomOf="@+id/edit_valor"/>
 
             <android.widget.Button
                 android:id="@+id/button2"
