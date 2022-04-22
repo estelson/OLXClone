@@ -28,9 +28,10 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/imagem_perfil"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_user_perfil" />
 
         </androidx.cardview.widget.CardView>
@@ -47,6 +48,7 @@
             app:layout_constraintTop_toTopOf="@+id/cardView">
 
             <TextView
+                android:id="@+id/text_usuario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Acesse sua conta agora!"

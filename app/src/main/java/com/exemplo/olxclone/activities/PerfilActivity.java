@@ -115,7 +115,7 @@ public class PerfilActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
         if(usuario.getImagemPerfil() != null){
-            Picasso.get().load(usuario.getImagemPerfil()).into(imagem_perfil);
+            Picasso.get().load(usuario.getImagemPerfil()).placeholder(R.drawable.loading).into(imagem_perfil);
         }
     }
 
