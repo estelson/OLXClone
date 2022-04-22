@@ -55,6 +55,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
     private Endereco enderecoUsuario;
 
+    private Local local;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +118,9 @@ public class FormAnuncioActivity extends AppCompatActivity {
                 if(cep.length() == 8) {
                     buscarEndereco(cep);
                 } else {
+                    local = null;
+                    configEndereco();
+
                     progressBar.setVisibility(View.GONE);
                 }
             }
@@ -136,14 +141,38 @@ public class FormAnuncioActivity extends AppCompatActivity {
         call.enqueue(new Callback<Local>() {
             @Override
             public void onResponse(Call<Local> call, Response<Local> response) {
+                if(response.isSuccessful()) {
+                    local = response.body();
+                    if(local.getLocalidade() == null) {
+                        Toast.makeText(FormAnuncioActivity.this, "CEP inválido", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(FormAnuncioActivity.this, "Serviço de busca de CEP indisponível.\nTente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                }
 
+                configEndereco();
             }
 
             @Override
             public void onFailure(Call<Local> call, Throwable t) {
-                Toast.makeText(FormAnuncioActivity.this, "Serviço de busca de CEP indisponível.\nTente novamente mais tarde.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FormAnuncioActivity.this, "Serviço de busca de CEP indisponível.\nTente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void configEndereco() {
+        if(local != null) {
+            if(local.getLocalidade() != null) {
+                String endereco = local.getLocalidade() + ", " + local.getBairro() + " - DDD  " + local.getDdd();
+                txt_local.setText(endereco);
+            } else {
+                txt_local.setText("");
+            }
+        } else {
+            txt_local.setText("");
+        }
+
+        progressBar.setVisibility(View.GONE);
     }
 
     private void iniciaRetrofit() {

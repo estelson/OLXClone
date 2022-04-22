@@ -13,7 +13,7 @@ public interface CEPService {
      * @param cep
      * @return
      */
-    @GET("{cep}/json")
+    @GET("{cep}/json/")
     Call<Local> recuperaCEP(@Path("cep") String cep);
 
 }
