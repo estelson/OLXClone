@@ -13,7 +13,8 @@
         android:theme="@style/Theme.OLXClone">
         <activity
             android:name=".activities.FormAnuncioActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.EnderecoActivity"
             android:exported="false"
