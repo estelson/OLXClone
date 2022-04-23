@@ -2,12 +2,17 @@ package com.exemplo.olxclone.activities;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +38,7 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.santalu.maskara.widget.MaskEditText;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,6 +55,9 @@ public class FormAnuncioActivity extends AppCompatActivity {
     private ImageView imagem0;
     private ImageView imagem1;
     private ImageView imagem2;
+
+    private EditText edt_titulo;
+    private EditText edt_descricao;
 
     private CurrencyEditText edt_valor;
 
@@ -79,6 +88,43 @@ public class FormAnuncioActivity extends AppCompatActivity {
         recuperaEndereco();
 
         configCliques();
+    }
+
+    public void validaDados(View view) {
+        String titulo = edt_titulo.getText().toString().trim();
+        double valor = (double) edt_valor.getRawValue() / 100;
+        String descricao = edt_descricao.getText().toString().trim();
+
+        if (!titulo.isEmpty()) {
+            if (valor > 0) {
+                if (!categoriaSelecionada.isEmpty()) {
+                    if (!descricao.isEmpty()) {
+                        if (local != null) {
+                            if (local.getLocalidade() != null) {
+                                Toast.makeText(this, "Tudo certo!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                edt_cep.requestFocus();
+                                Toast.makeText(this, "Informe um CEP válido", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            edt_cep.requestFocus();
+                            Toast.makeText(this, "Informe um CEP válido", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        edt_descricao.requestFocus();
+                        edt_descricao.setError("Informe a descrição");
+                    }
+                } else {
+                    Toast.makeText(this, "Selecione uma categoria", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                edt_valor.requestFocus();
+                edt_valor.setError("Valor inválido");
+            }
+        } else {
+            edt_titulo.requestFocus();
+            edt_titulo.setError("Informe o título");
+        }
     }
 
     private void configCliques() {
@@ -163,7 +209,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
         showDialogPermissao(
                 permissionListener,
-                new String[] {Manifest.permission.CAMERA},
+                new String[]{Manifest.permission.CAMERA},
                 "Permissão de acesso à câmera do dispositivo negada. Deseja ativar agora?"
         );
     }
@@ -183,7 +229,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
         showDialogPermissao(
                 permissionListener,
-                new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 "Permissão de acesso à galeria do dispositivo negada. Deseja ativar agora?"
         );
     }
@@ -193,7 +239,9 @@ public class FormAnuncioActivity extends AppCompatActivity {
     }
 
     private void abrirGaleria(int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
+        startActivityForResult(intent, requestCode);
     }
 
     private void showDialogPermissao(PermissionListener permissionListener, String[] permissoes, String message) {
@@ -225,7 +273,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 String cep = charSequence.toString().replaceAll("_", "").replace("-", "");
-                if(cep.length() == 8) {
+                if (cep.length() == 8) {
                     buscarEndereco(cep);
                 } else {
                     local = null;
@@ -251,9 +299,9 @@ public class FormAnuncioActivity extends AppCompatActivity {
         call.enqueue(new Callback<Local>() {
             @Override
             public void onResponse(Call<Local> call, Response<Local> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     local = response.body();
-                    if(local.getLocalidade() == null) {
+                    if (local.getLocalidade() == null) {
                         Toast.makeText(FormAnuncioActivity.this, "CEP inválido", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -271,8 +319,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
     }
 
     private void configEndereco() {
-        if(local != null) {
-            if(local.getLocalidade() != null) {
+        if (local != null) {
+            if (local.getLocalidade() != null) {
                 String endereco = local.getLocalidade() + ", " + local.getBairro() + " - DDD  " + local.getDdd();
                 txt_local.setText(endereco);
             } else {
@@ -299,6 +347,9 @@ public class FormAnuncioActivity extends AppCompatActivity {
         imagem1 = findViewById(R.id.imagem1);
         imagem2 = findViewById(R.id.imagem2);
 
+        edt_titulo = findViewById(R.id.edt_titulo);
+        edt_descricao = findViewById(R.id.edt_descricao);
+
         edt_valor = findViewById(R.id.edit_valor);
         edt_valor.setLocale(new Locale("PT", "br"));
 
@@ -316,14 +367,64 @@ public class FormAnuncioActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
+            Bitmap bitmap0;
+            Bitmap bitmap1;
+            Bitmap bitmap2;
+
+            Uri imagemSelecionada = data.getData();
+            String caminhoImagem;
+
             if (requestCode == REQUEST_CATEGORIA) {
                 Categoria categoria = (Categoria) data.getSerializableExtra("categoriaSelecionada");
                 categoriaSelecionada = categoria.getNome();
 
                 btn_categoria.setText(categoriaSelecionada);
-            } else if (true) { // Controla a seleção de imagens da câmera
+            } else if (requestCode <= 2) { // Controla a seleção de imagens da galeria do dispositivo
+                caminhoImagem = imagemSelecionada.toString();
 
-            } else { // Controla a seleção de imagens da galeria do dispositivo
+                try {
+                    switch (requestCode) {
+                        case 0:
+                            if (Build.VERSION.SDK_INT < 28) {
+                                bitmap0 = MediaStore.Images.Media.getBitmap(getContentResolver(), imagemSelecionada);
+                            } else {
+                                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imagemSelecionada);
+
+                                bitmap0 = ImageDecoder.decodeBitmap(source);
+                            }
+
+                            imagem0.setImageBitmap(bitmap0);
+
+                            break;
+                        case 1:
+                            if (Build.VERSION.SDK_INT < 28) {
+                                bitmap1 = MediaStore.Images.Media.getBitmap(getContentResolver(), imagemSelecionada);
+                            } else {
+                                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imagemSelecionada);
+
+                                bitmap1 = ImageDecoder.decodeBitmap(source);
+                            }
+
+                            imagem1.setImageBitmap(bitmap1);
+
+                            break;
+                        case 2:
+                            if (Build.VERSION.SDK_INT < 28) {
+                                bitmap2 = MediaStore.Images.Media.getBitmap(getContentResolver(), imagemSelecionada);
+                            } else {
+                                ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imagemSelecionada);
+
+                                bitmap2 = ImageDecoder.decodeBitmap(source);
+                            }
+
+                            imagem2.setImageBitmap(bitmap2);
+
+                            break;
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(this, "Erro ao carregar a imagem selecionada. Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            } else { // Controla a seleção de imagens da câmera do dispositivo
 
             }
         }

@@ -18,7 +18,7 @@
         android:layout_height="0dp"
         android:fillViewport="true"
         android:scrollbarThumbVertical="@null"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/btn_salvar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include5">
@@ -54,7 +54,8 @@
                             android:id="@+id/imagem0"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/img_bg_form_anuncio" />
+                            android:src="@drawable/img_bg_form_anuncio"
+                            android:scaleType="centerCrop"/>
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
@@ -69,7 +70,8 @@
                             android:id="@+id/imagem1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/img_bg_form_anuncio" />
+                            android:src="@drawable/img_bg_form_anuncio"
+                            android:scaleType="centerCrop"/>
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
@@ -82,7 +84,8 @@
                             android:id="@+id/imagem2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/img_bg_form_anuncio" />
+                            android:src="@drawable/img_bg_form_anuncio"
+                            android:scaleType="centerCrop"/>
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
@@ -101,7 +104,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/edt_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -123,7 +126,7 @@
                 android:text="Preço"
                 android:textColor="@color/cor_roxa"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_titulo" />
 
             <com.blackcat.currencyedittext.CurrencyEditText
                 android:id="@+id/edit_valor"
@@ -182,7 +185,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btn_categoria" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/edt_descricao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -204,7 +207,7 @@
                 android:text="CEP"
                 android:textColor="@color/cor_roxa"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText3" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_descricao" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -258,7 +261,7 @@
     </ScrollView>
 
     <android.widget.Button
-        android:id="@+id/button"
+        android:id="@+id/btn_salvar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/cor_laranja"
@@ -267,6 +270,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp"
+        android:onClick="validaDados"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
