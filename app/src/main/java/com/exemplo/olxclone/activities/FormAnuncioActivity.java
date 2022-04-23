@@ -1,5 +1,6 @@
 package com.exemplo.olxclone.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -28,8 +29,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.santalu.maskara.widget.MaskEditText;
 
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -128,18 +132,79 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
         modalBottomSheet.findViewById(R.id.btn_camera).setOnClickListener(v -> {
             bottomSheetDialog.dismiss();
-            Toast.makeText(this, "Câmera", Toast.LENGTH_SHORT).show();
+
+            verificaPermissaoCamera(requestCode);
         });
 
         modalBottomSheet.findViewById(R.id.btn_galeria).setOnClickListener(v -> {
             bottomSheetDialog.dismiss();
-            Toast.makeText(this, "Galeria", Toast.LENGTH_SHORT).show();
+
+            verificaPermissaoGaleria(requestCode);
         });
 
         modalBottomSheet.findViewById(R.id.btn_close).setOnClickListener(v -> {
             bottomSheetDialog.dismiss();
             Toast.makeText(this, "Fechando", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void verificaPermissaoCamera(int requestCode) {
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                abrirCamera(requestCode);
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+                Toast.makeText(FormAnuncioActivity.this, "Permissão negada", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        showDialogPermissao(
+                permissionListener,
+                new String[] {Manifest.permission.CAMERA},
+                "Permissão de acesso à câmera do dispositivo negada. Deseja ativar agora?"
+        );
+    }
+
+    private void verificaPermissaoGaleria(int requestCode) {
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                abrirGaleria(requestCode);
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+                Toast.makeText(FormAnuncioActivity.this, "Permissão negada", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        showDialogPermissao(
+                permissionListener,
+                new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                "Permissão de acesso à galeria do dispositivo negada. Deseja ativar agora?"
+        );
+    }
+
+    private void abrirCamera(int requestCode) {
+
+    }
+
+    private void abrirGaleria(int requestCode) {
+
+    }
+
+    private void showDialogPermissao(PermissionListener permissionListener, String[] permissoes, String message) {
+        TedPermission.create()
+                .setPermissionListener(permissionListener)
+                .setDeniedTitle("Permissão negada")
+                .setDeniedMessage(message)
+                .setDeniedCloseButtonText("Não")
+                .setGotoSettingButtonText("Sim")
+                .setPermissions(permissoes)
+                .check();
     }
 
     private void configCep() {
