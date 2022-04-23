@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ import com.exemplo.olxclone.api.CEPService;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Categoria;
 import com.exemplo.olxclone.model.Endereco;
+import com.exemplo.olxclone.model.Imagem;
 import com.exemplo.olxclone.model.Local;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +46,7 @@ import com.santalu.maskara.widget.MaskEditText;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -83,6 +86,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
     private Local local;
 
     private String currentPhotoPath;
+
+    private List<Imagem> imagemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,6 +227,46 @@ public class FormAnuncioActivity extends AppCompatActivity {
         );
     }
 
+    private void configUpload(int requestCode, String caminhoImagem) {
+        int request = 0;
+        switch (requestCode) {
+            case 0:
+            case 3:
+                request = 0;
+                break;
+            case 1:
+            case 4:
+                request = 1;
+                break;
+            case 2:
+            case 5:
+                request = 2;
+                break;
+        }
+
+        Imagem imagem = new Imagem(caminhoImagem, request);
+
+        // Verifica se é uma nova imagem ou se está alterando a imagem existente
+        if(imagemList.size() > 0) {
+            boolean encontrou = false;
+            for (int i = 0; i < imagemList.size(); i++) {
+                if(imagemList.get(i).getIndex() == request) {
+                    encontrou = true;
+                }
+            }
+
+            if(encontrou) {
+                imagemList.set(request, imagem);
+            } else {
+                imagemList.add(imagem);
+            }
+        } else {
+            imagemList.add(imagem);
+        }
+
+        Log.i("INFOTESTE", "configUpload: " + imagemList.size());
+    }
+
     private void verificaPermissaoGaleria(int requestCode) {
         PermissionListener permissionListener = new PermissionListener() {
             @Override
@@ -242,16 +287,6 @@ public class FormAnuncioActivity extends AppCompatActivity {
         );
     }
 
-//    private void dispatchTakePictureIntent(int requestCode) {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//        try {
-//            startActivityForResult(takePictureIntent, requestCode);
-//        } catch (ActivityNotFoundException e) {
-//            Toast.makeText(this, "Não foi possível abrir a câmera do dispositivo. Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show();
-//        }
-//    }
-
     private void dispatchTakePictureIntent(int requestCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -260,18 +295,23 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
         int request = 0;
         switch (requestCode) {
-            case 0:
+            case 0: {
                 request = 3;
 
                 break;
-            case 1:
+            }
+
+            case 1: {
                 request = 4;
 
                 break;
-            case 2:
+            }
+
+            case 2: {
                 request = 5;
 
                 break;
+            }
         }
 
         try {
@@ -497,6 +537,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
                             break;
                     }
+
+                    configUpload(requestCode, caminhoImagem);
                 } catch (IOException e) {
                     Toast.makeText(this, "Erro ao carregar a imagem selecionada. Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -507,17 +549,16 @@ public class FormAnuncioActivity extends AppCompatActivity {
                 switch (requestCode) {
                     case 3:
                         imagem0.setImageURI(Uri.fromFile(file));
-
                         break;
                     case 4:
                         imagem1.setImageURI(Uri.fromFile(file));
-
                         break;
                     case 5:
                         imagem2.setImageURI(Uri.fromFile(file));
-
                         break;
                 }
+
+                configUpload(requestCode, caminhoImagem);
             }
         }
     }
