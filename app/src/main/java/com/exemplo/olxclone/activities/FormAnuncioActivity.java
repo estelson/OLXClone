@@ -40,6 +40,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.santalu.maskara.widget.MaskEditText;
@@ -129,7 +131,13 @@ public class FormAnuncioActivity extends AppCompatActivity {
                                 anuncio.setDescricao(descricao);
                                 anuncio.setLocal(local);
 
-                                anuncio.salvar(novoAnuncio);
+                                if(imagemList.size() == 3) {
+                                    for (int i = 0; i < imagemList.size(); i++) {
+                                        salvarImagemFirebase(imagemList.get(i), i);
+                                    }
+                                } else {
+                                    Toast.makeText(this, "Selecione 3 imagens para o anúncio", Toast.LENGTH_LONG).show();
+                                }
                             } else {
                                 edt_cep.requestFocus();
                                 Toast.makeText(this, "Informe um CEP válido", Toast.LENGTH_SHORT).show();
@@ -153,6 +161,27 @@ public class FormAnuncioActivity extends AppCompatActivity {
             edt_titulo.requestFocus();
             edt_titulo.setError("Informe o título");
         }
+    }
+
+    private void salvarImagemFirebase(Imagem imagem, int index) {
+        StorageReference storageReference = FirebaseHelper.getStorageReference()
+                .child("imagens")
+                .child("anuncios")
+                .child(anuncio.getId())
+                .child("imagem" + index + ".jpeg");
+
+        UploadTask uploadTask = storageReference.putFile(Uri.parse(imagem.getCaminhoImagem()));
+        uploadTask.addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnCompleteListener(task -> {
+                if(novoAnuncio) {
+                    anuncio.getUrlImagens().add(index, task.getResult().toString());
+                } else {
+                    anuncio.getUrlImagens().set(imagem.getIndex(), task.getResult().toString());
+                }
+
+                if(imagemList.size() == index + 1) {
+                    anuncio.salvar(novoAnuncio);
+                }
+        })).addOnFailureListener(e -> Toast.makeText(this, "Erro ao gravar imagem" + index + ". Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
     private void configCliques() {

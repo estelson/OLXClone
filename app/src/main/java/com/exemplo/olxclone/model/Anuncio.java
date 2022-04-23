@@ -17,7 +17,7 @@ public class Anuncio {
     private String descricao;
     private Local local;
     private long dataPublicacao;
-    private List<String> urlImagem = new ArrayList<>();
+    private List<String> urlImagens = new ArrayList<>();
 
     public Anuncio() {
         DatabaseReference anuncioRef = FirebaseHelper.getDatabaseReference();
@@ -116,12 +116,12 @@ public class Anuncio {
         this.dataPublicacao = dataPublicacao;
     }
 
-    public List<String> getUrlImagem() {
-        return urlImagem;
+    public List<String> getUrlImagens() {
+        return urlImagens;
     }
 
-    public void setUrlImagem(List<String> urlImagem) {
-        this.urlImagem = urlImagem;
+    public void setUrlImagem(List<String> urlImagens) {
+        this.urlImagens = urlImagens;
     }
 
 }
