@@ -30,6 +30,7 @@ import com.blackcat.currencyedittext.CurrencyEditText;
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.api.CEPService;
 import com.exemplo.olxclone.helper.FirebaseHelper;
+import com.exemplo.olxclone.model.Anuncio;
 import com.exemplo.olxclone.model.Categoria;
 import com.exemplo.olxclone.model.Endereco;
 import com.exemplo.olxclone.model.Imagem;
@@ -89,6 +90,9 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
     private List<Imagem> imagemList = new ArrayList<>();
 
+    private Anuncio anuncio;
+    private boolean novoAnuncio = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +118,18 @@ public class FormAnuncioActivity extends AppCompatActivity {
                     if (!descricao.isEmpty()) {
                         if (local != null) {
                             if (local.getLocalidade() != null) {
-                                Toast.makeText(this, "Tudo certo!", Toast.LENGTH_SHORT).show();
+                                if(anuncio == null) {
+                                    anuncio = new Anuncio();
+                                }
+
+                                anuncio.setIdUsuario(FirebaseHelper.getUidFirebase());
+                                anuncio.setTitulo(titulo);
+                                anuncio.setValor(valor);
+                                anuncio.setCategoria(categoriaSelecionada);
+                                anuncio.setDescricao(descricao);
+                                anuncio.setLocal(local);
+
+                                anuncio.salvar(novoAnuncio);
                             } else {
                                 edt_cep.requestFocus();
                                 Toast.makeText(this, "Informe um CEP válido", Toast.LENGTH_SHORT).show();
