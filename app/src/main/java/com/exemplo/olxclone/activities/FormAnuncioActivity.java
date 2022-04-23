@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Categoria;
 import com.exemplo.olxclone.model.Endereco;
 import com.exemplo.olxclone.model.Local;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +41,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FormAnuncioActivity extends AppCompatActivity {
 
     private final int REQUEST_CATEGORIA = 100;
+
+    private ImageView imagem0;
+    private ImageView imagem1;
+    private ImageView imagem2;
 
     private CurrencyEditText edt_valor;
 
@@ -67,6 +73,22 @@ public class FormAnuncioActivity extends AppCompatActivity {
         iniciaRetrofit();
 
         recuperaEndereco();
+
+        configCliques();
+    }
+
+    private void configCliques() {
+        imagem0.setOnClickListener(v -> {
+            showBottomDialog(0);
+        });
+
+        imagem1.setOnClickListener(v -> {
+            showBottomDialog(1);
+        });
+
+        imagem2.setOnClickListener(v -> {
+            showBottomDialog(2);
+        });
     }
 
     public void selecionarCategoria(View view) {
@@ -94,6 +116,29 @@ public class FormAnuncioActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+    }
+
+    private void showBottomDialog(int requestCode) {
+        View modalBottomSheet = getLayoutInflater().inflate(R.layout.layout_bottom_sheet, null);
+
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialog);
+        bottomSheetDialog.setContentView(modalBottomSheet);
+        bottomSheetDialog.show();
+
+        modalBottomSheet.findViewById(R.id.btn_camera).setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+            Toast.makeText(this, "Câmera", Toast.LENGTH_SHORT).show();
+        });
+
+        modalBottomSheet.findViewById(R.id.btn_galeria).setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+            Toast.makeText(this, "Galeria", Toast.LENGTH_SHORT).show();
+        });
+
+        modalBottomSheet.findViewById(R.id.btn_close).setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+            Toast.makeText(this, "Fechando", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -184,6 +229,10 @@ public class FormAnuncioActivity extends AppCompatActivity {
     private void iniciaComponentes() {
         TextView text_toolbar = findViewById(R.id.text_toolbar);
         text_toolbar.setText("Novo anúncio");
+
+        imagem0 = findViewById(R.id.imagem0);
+        imagem1 = findViewById(R.id.imagem1);
+        imagem2 = findViewById(R.id.imagem2);
 
         edt_valor = findViewById(R.id.edit_valor);
         edt_valor.setLocale(new Locale("PT", "br"));

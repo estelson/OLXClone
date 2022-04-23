@@ -19,7 +19,7 @@
         android:textSize="16sp"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:drawableStart="@drawable/ic_camera"
+        android:drawableStart="@drawable/ic_camera2"
         android:drawablePadding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
