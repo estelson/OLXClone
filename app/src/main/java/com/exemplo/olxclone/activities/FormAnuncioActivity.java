@@ -1,12 +1,14 @@
 package com.exemplo.olxclone.activities;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.blackcat.currencyedittext.CurrencyEditText;
 import com.exemplo.olxclone.R;
@@ -38,7 +41,10 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.santalu.maskara.widget.MaskEditText;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -75,6 +81,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
     private Endereco enderecoUsuario;
 
     private Local local;
+
+    private String currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +206,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                abrirCamera(requestCode);
+                dispatchTakePictureIntent(requestCode);
             }
 
             @Override
@@ -234,8 +242,72 @@ public class FormAnuncioActivity extends AppCompatActivity {
         );
     }
 
-    private void abrirCamera(int requestCode) {
+//    private void dispatchTakePictureIntent(int requestCode) {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//        try {
+//            startActivityForResult(takePictureIntent, requestCode);
+//        } catch (ActivityNotFoundException e) {
+//            Toast.makeText(this, "Não foi possível abrir a câmera do dispositivo. Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//        }
+//    }
 
+    private void dispatchTakePictureIntent(int requestCode) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // Create the File where the photo should go
+        File photoFile = null;
+
+        int request = 0;
+        switch (requestCode) {
+            case 0:
+                request = 3;
+
+                break;
+            case 1:
+                request = 4;
+
+                break;
+            case 2:
+                request = 5;
+
+                break;
+        }
+
+        try {
+            photoFile = createImageFile();
+        } catch (IOException ex) {
+            Toast.makeText(this, "Não foi possível criar o arquivo de foto. Motivo: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        // Continue only if the File was successfully created
+        if (photoFile != null) {
+            Uri photoURI = FileProvider.getUriForFile(this,
+                    "com.exemplo.olxclone.fileprovider",
+                    photoFile);
+
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+            startActivityForResult(takePictureIntent, request);
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+
+        return image;
     }
 
     private void abrirGaleria(int requestCode) {
@@ -371,7 +443,11 @@ public class FormAnuncioActivity extends AppCompatActivity {
             Bitmap bitmap1;
             Bitmap bitmap2;
 
-            Uri imagemSelecionada = data.getData();
+            Uri imagemSelecionada = null;
+            if(data != null) {
+                imagemSelecionada = data.getData();
+            }
+
             String caminhoImagem;
 
             if (requestCode == REQUEST_CATEGORIA) {
@@ -425,7 +501,23 @@ public class FormAnuncioActivity extends AppCompatActivity {
                     Toast.makeText(this, "Erro ao carregar a imagem selecionada. Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             } else { // Controla a seleção de imagens da câmera do dispositivo
+                File file = new File(currentPhotoPath);
+                caminhoImagem = String.valueOf(file.toURI());
 
+                switch (requestCode) {
+                    case 3:
+                        imagem0.setImageURI(Uri.fromFile(file));
+
+                        break;
+                    case 4:
+                        imagem1.setImageURI(Uri.fromFile(file));
+
+                        break;
+                    case 5:
+                        imagem2.setImageURI(Uri.fromFile(file));
+
+                        break;
+                }
             }
         }
     }
