@@ -179,7 +179,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
                 }
 
                 if(imagemList.size() == index + 1) {
-                    anuncio.salvar(novoAnuncio);
+                    anuncio.salvar(this, novoAnuncio);
                 }
         })).addOnFailureListener(e -> Toast.makeText(this, "Erro ao gravar imagem" + index + ". Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }

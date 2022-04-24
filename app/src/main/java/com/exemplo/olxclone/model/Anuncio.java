@@ -1,5 +1,9 @@
 package com.exemplo.olxclone.model;
 
+import android.app.Activity;
+import android.content.Intent;
+
+import com.exemplo.olxclone.activities.MainActivity;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
@@ -25,7 +29,7 @@ public class Anuncio {
         this.setId(anuncioRef.push().getKey());
     }
 
-    public void salvar(boolean novoAnuncio) {
+    public void salvar(Activity activity, boolean novoAnuncio) {
         DatabaseReference anuncioPublicoRef = FirebaseHelper.getDatabaseReference()
                 .child("anuncios_publicos")
                 .child(this.getId());
@@ -48,7 +52,15 @@ public class Anuncio {
             DatabaseReference dataMeusAnunciosRef = meusAnunciosRef
                     .child("dataPublicacao");
 
-            dataMeusAnunciosRef.setValue(ServerValue.TIMESTAMP);
+            dataMeusAnunciosRef.setValue(ServerValue.TIMESTAMP).addOnCompleteListener(task ->  {
+                activity.finish();
+
+                Intent intent = new Intent(activity, MainActivity.class);
+                intent.putExtra("id", 2);
+                activity.startActivity(intent);
+            });
+        } else {
+            activity.finish();
         }
     }
 

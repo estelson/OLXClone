@@ -69,6 +69,8 @@ public class MeusAnunciosFragment extends Fragment implements AnuncioAdapter.OnC
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()) {
+                        anuncioList.clear();
+
                         for(DataSnapshot ds : snapshot.getChildren()) {
                             Anuncio anuncio = ds.getValue(Anuncio.class);
                             anuncioList.add(anuncio);
