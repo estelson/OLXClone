@@ -14,12 +14,12 @@ import com.exemplo.olxclone.model.Categoria;
 
 import java.util.List;
 
-public class AdapterCategoria extends RecyclerView.Adapter<AdapterCategoria.MyViewHolder> {
+public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.MyViewHolder> {
 
     private List<Categoria> categoriaList;
     private OnClickListener onClickListener;
 
-    public AdapterCategoria(List<Categoria> categoriaList, OnClickListener onClickListener) {
+    public CategoriaAdapter(List<Categoria> categoriaList, OnClickListener onClickListener) {
         this.categoriaList = categoriaList;
         this.onClickListener = onClickListener;
     }

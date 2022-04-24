@@ -7,18 +7,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.exemplo.olxclone.R;
-import com.exemplo.olxclone.adapter.AdapterCategoria;
+import com.exemplo.olxclone.adapter.CategoriaAdapter;
 import com.exemplo.olxclone.helper.CategoriaList;
 import com.exemplo.olxclone.model.Categoria;
 
-public class CategoriasActivity extends AppCompatActivity implements AdapterCategoria.OnClickListener {
+public class CategoriasActivity extends AppCompatActivity implements CategoriaAdapter.OnClickListener {
 
     private RecyclerView rv_categorias;
     
-    private AdapterCategoria adapterCategoria;
+    private CategoriaAdapter categoriaAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +35,9 @@ public class CategoriasActivity extends AppCompatActivity implements AdapterCate
         rv_categorias.setLayoutManager(new LinearLayoutManager(this));
         rv_categorias.setHasFixedSize(true);
         
-        adapterCategoria = new AdapterCategoria(CategoriaList.getList(false), this);
+        categoriaAdapter = new CategoriaAdapter(CategoriaList.getList(false), this);
 
-        rv_categorias.setAdapter(adapterCategoria);
+        rv_categorias.setAdapter(categoriaAdapter);
     }
 
     private void configCliques() {

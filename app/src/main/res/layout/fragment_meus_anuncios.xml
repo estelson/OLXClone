@@ -1,14 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.MeusAnunciosFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rv_anuncios">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ProgressBar"/>
+
+        <TextView
+            android:id="@+id/text_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Carregando..."
+            android:textAlignment="center" />
+
+        <android.widget.Button
+            android:id="@+id/btn_logar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:text="Fazer login"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+    <com.tsuryo.swipeablerv.SwipeableRecyclerView
+        android:id="@+id/rv_anuncios"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Fragmento Meus Anúncios" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:leftBgColor="@color/blue"
+        app:leftImage="@drawable/ic_delete"
+        app:rightBgColor="@color/cor_delete"
+        app:rightImage="@drawable/ic_edit"
+        app:textColor="@android:color/white" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,7 +41,7 @@ public class AnuncioAdapter extends RecyclerView.Adapter<AnuncioAdapter.MyViewHo
 
         holder.text_titulo.setText(anuncio.getTitulo());
         //holder.text_valor.setText(anuncio.getValor());
-        holder.text_local.setText(anuncio.getLocal().getLocalidade());
+        holder.text_local.setText(anuncio.getLocal().getLocalidade() + ", " + anuncio.getLocal().getBairro() + " - DDD " + anuncio.getLocal().getDdd());
     }
 
     @Override
