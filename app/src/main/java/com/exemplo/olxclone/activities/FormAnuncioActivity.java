@@ -30,6 +30,7 @@ import com.blackcat.currencyedittext.CurrencyEditText;
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.api.CEPService;
 import com.exemplo.olxclone.helper.FirebaseHelper;
+import com.exemplo.olxclone.helper.GetMask;
 import com.exemplo.olxclone.model.Anuncio;
 import com.exemplo.olxclone.model.Categoria;
 import com.exemplo.olxclone.model.Endereco;
@@ -45,6 +46,7 @@ import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.santalu.maskara.widget.MaskEditText;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,6 +65,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FormAnuncioActivity extends AppCompatActivity {
 
     private final int REQUEST_CATEGORIA = 100;
+
+    private TextView text_toolbar;
 
     private ImageView imagem0;
     private ImageView imagem1;
@@ -90,7 +94,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
     private String currentPhotoPath;
 
-    private List<Imagem> imagemList = new ArrayList<>();
+    private final List<Imagem> imagemUploadList = new ArrayList<>();
 
     private Anuncio anuncio;
     private boolean novoAnuncio = true;
@@ -102,11 +106,37 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
         iniciaComponentes();
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            anuncio = (Anuncio) bundle.getSerializable("anuncioSelecionado");
+
+            configDados();
+        }
+
         iniciaRetrofit();
 
         recuperaEndereco();
 
         configCliques();
+    }
+
+    private void configDados() {
+        text_toolbar.setText("Edição de anúncio");
+
+        Picasso.get().load(anuncio.getUrlImagens().get(0)).into(imagem0);
+        Picasso.get().load(anuncio.getUrlImagens().get(1)).into(imagem1);
+        Picasso.get().load(anuncio.getUrlImagens().get(2)).into(imagem2);
+
+        edt_titulo.setText(anuncio.getTitulo());
+        edt_valor.setText(GetMask.getValor(anuncio.getValor()));
+
+        categoriaSelecionada = anuncio.getCategoria();
+        btn_categoria.setText(categoriaSelecionada);
+
+        edt_descricao.setText(anuncio.getDescricao());
+        edt_cep.setText(anuncio.getLocal().getCep());
+
+        novoAnuncio = false;
     }
 
     public void validaDados(View view) {
@@ -131,12 +161,22 @@ public class FormAnuncioActivity extends AppCompatActivity {
                                 anuncio.setDescricao(descricao);
                                 anuncio.setLocal(local);
 
-                                if(imagemList.size() == 3) {
-                                    for (int i = 0; i < imagemList.size(); i++) {
-                                        salvarImagemFirebase(imagemList.get(i), i);
+                                if(novoAnuncio) { // Inclusão
+                                    if (imagemUploadList.size() == 3) {
+                                        for (int i = 0; i < imagemUploadList.size(); i++) {
+                                            salvarImagemFirebase(imagemUploadList.get(i), i);
+                                        }
+                                    } else {
+                                        Toast.makeText(this, "Selecione 3 imagens para o anúncio", Toast.LENGTH_LONG).show();
                                     }
-                                } else {
-                                    Toast.makeText(this, "Selecione 3 imagens para o anúncio", Toast.LENGTH_LONG).show();
+                                } else { // Alteração
+                                    if(imagemUploadList.size() > 0) {
+                                        for (int i = 0; i < imagemUploadList.size(); i++) {
+                                            salvarImagemFirebase(imagemUploadList.get(i), i);
+                                        }
+                                    } else {
+                                        anuncio.salvar(this, false);
+                                    }
                                 }
                             } else {
                                 edt_cep.requestFocus();
@@ -163,22 +203,22 @@ public class FormAnuncioActivity extends AppCompatActivity {
         }
     }
 
-    private void salvarImagemFirebase(Imagem imagem, int index) {
+    private void salvarImagemFirebase(Imagem imagemUpload, int index) {
         StorageReference storageReference = FirebaseHelper.getStorageReference()
                 .child("imagens")
                 .child("anuncios")
                 .child(anuncio.getId())
                 .child("imagem" + index + ".jpeg");
 
-        UploadTask uploadTask = storageReference.putFile(Uri.parse(imagem.getCaminhoImagem()));
+        UploadTask uploadTask = storageReference.putFile(Uri.parse(imagemUpload.getCaminhoImagem()));
         uploadTask.addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnCompleteListener(task -> {
                 if(novoAnuncio) {
                     anuncio.getUrlImagens().add(index, task.getResult().toString());
                 } else {
-                    anuncio.getUrlImagens().set(imagem.getIndex(), task.getResult().toString());
+                    anuncio.getUrlImagens().set(imagemUpload.getIndex(), task.getResult().toString());
                 }
 
-                if(imagemList.size() == index + 1) {
+                if(imagemUploadList.size() == index + 1) {
                     anuncio.salvar(this, novoAnuncio);
                 }
         })).addOnFailureListener(e -> Toast.makeText(this, "Erro ao gravar imagem" + index + ". Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show());
@@ -214,7 +254,11 @@ public class FormAnuncioActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 enderecoUsuario = snapshot.getValue(Endereco.class);
-                edt_cep.setText(enderecoUsuario.getCep());
+                if(novoAnuncio) {
+                    edt_cep.setText(enderecoUsuario.getCep());
+                } else {
+                    edt_cep.setText(anuncio.getLocal().getCep());
+                }
 
                 progressBar.setVisibility(View.GONE);
             }
@@ -288,27 +332,27 @@ public class FormAnuncioActivity extends AppCompatActivity {
                 break;
         }
 
-        Imagem imagem = new Imagem(caminhoImagem, request);
+        Imagem imagemUpload = new Imagem(caminhoImagem, request);
 
         // Verifica se é uma nova imagem ou se está alterando a imagem existente
-        if(imagemList.size() > 0) {
+        if(imagemUploadList.size() > 0) {
             boolean encontrou = false;
-            for (int i = 0; i < imagemList.size(); i++) {
-                if(imagemList.get(i).getIndex() == request) {
+            for (int i = 0; i < imagemUploadList.size(); i++) {
+                if(imagemUploadList.get(i).getIndex() == request) {
                     encontrou = true;
                 }
             }
 
             if(encontrou) {
-                imagemList.set(request, imagem);
+                imagemUploadList.set(request, imagemUpload);
             } else {
-                imagemList.add(imagem);
+                imagemUploadList.add(imagemUpload);
             }
         } else {
-            imagemList.add(imagem);
+            imagemUploadList.add(imagemUpload);
         }
 
-        Log.i("INFOTESTE", "configUpload: " + imagemList.size());
+        Log.i("INFOTESTE", "configUpload: " + imagemUploadList.size());
     }
 
     private void verificaPermissaoGaleria(int requestCode) {
@@ -341,19 +385,14 @@ public class FormAnuncioActivity extends AppCompatActivity {
         switch (requestCode) {
             case 0: {
                 request = 3;
-
                 break;
             }
-
             case 1: {
                 request = 4;
-
                 break;
             }
-
             case 2: {
                 request = 5;
-
                 break;
             }
         }
@@ -496,7 +535,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
     }
 
     private void iniciaComponentes() {
-        TextView text_toolbar = findViewById(R.id.text_toolbar);
+        text_toolbar = findViewById(R.id.text_toolbar);
         text_toolbar.setText("Novo anúncio");
 
         imagem0 = findViewById(R.id.imagem0);

@@ -1,5 +1,7 @@
 package com.exemplo.olxclone.fragments;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.exemplo.olxclone.R;
+import com.exemplo.olxclone.activities.FormAnuncioActivity;
 import com.exemplo.olxclone.adapter.AnuncioAdapter;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Anuncio;
@@ -21,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.tsuryo.swipeablerv.SwipeLeftRightCallback;
 import com.tsuryo.swipeablerv.SwipeableRecyclerView;
 
 import java.util.ArrayList;
@@ -30,15 +34,11 @@ import java.util.List;
 public class MeusAnunciosFragment extends Fragment implements AnuncioAdapter.OnClickListener {
 
     private AnuncioAdapter anuncioAdapter;
-
     private List<Anuncio> anuncioList = new ArrayList<>();
 
     private ProgressBar progressBar;
-
     private TextView text_info;
-
     private Button btn_logar;
-
     private SwipeableRecyclerView rv_anuncios;
 
     @Override
@@ -106,6 +106,37 @@ public class MeusAnunciosFragment extends Fragment implements AnuncioAdapter.OnC
 
         anuncioAdapter = new AnuncioAdapter(anuncioList, this);
         rv_anuncios.setAdapter(anuncioAdapter);
+
+        rv_anuncios.setListener(new SwipeLeftRightCallback.Listener() {
+            @Override
+            public void onSwipedLeft(int position) {
+                // Delete
+            }
+
+            @Override
+            public void onSwipedRight(int position) {
+                showDialogEdit(anuncioList.get(position));
+            }
+        });
+    }
+
+    private void showDialogEdit(Anuncio anuncio) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(requireContext());
+        alertDialog.setTitle("Deseja editar o anúncio?");
+        alertDialog.setMessage("Clique em 'Sim' para editar o anúncio ou clique em 'Fechar'.");
+        alertDialog.setNegativeButton("Fechar", ((dialog, which) -> {
+            dialog.dismiss();
+            anuncioAdapter.notifyDataSetChanged();
+        })).setPositiveButton("Sim", ((dialog, which) -> {
+            Intent intent = new Intent(requireActivity(), FormAnuncioActivity.class);
+            intent.putExtra("anuncioSelecionado", anuncio);
+            startActivity(intent);
+
+            anuncioAdapter.notifyDataSetChanged();
+        }));
+
+        AlertDialog dialog = alertDialog.create();
+        dialog.show();
     }
 
     private void iniciaComponentes(View view) {

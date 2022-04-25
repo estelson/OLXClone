@@ -2,16 +2,18 @@ package com.exemplo.olxclone.model;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.exemplo.olxclone.activities.MainActivity;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Anuncio {
+public class Anuncio implements Serializable {
 
     private String id;
     private String idUsuario;
@@ -59,8 +61,12 @@ public class Anuncio {
                 intent.putExtra("id", 2);
                 activity.startActivity(intent);
             });
+
+            Toast.makeText(activity, "Anúncio incluído com sucesso", Toast.LENGTH_SHORT).show();
         } else {
             activity.finish();
+
+            Toast.makeText(activity, "Anúncio alterado com sucesso", Toast.LENGTH_SHORT).show();
         }
     }
 
