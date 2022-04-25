@@ -110,7 +110,7 @@ public class MeusAnunciosFragment extends Fragment implements AnuncioAdapter.OnC
         rv_anuncios.setListener(new SwipeLeftRightCallback.Listener() {
             @Override
             public void onSwipedLeft(int position) {
-                // Delete
+                showDialogDelete(anuncioList.get(position));
             }
 
             @Override
@@ -131,6 +131,27 @@ public class MeusAnunciosFragment extends Fragment implements AnuncioAdapter.OnC
             Intent intent = new Intent(requireActivity(), FormAnuncioActivity.class);
             intent.putExtra("anuncioSelecionado", anuncio);
             startActivity(intent);
+
+            anuncioAdapter.notifyDataSetChanged();
+        }));
+
+        AlertDialog dialog = alertDialog.create();
+        dialog.show();
+    }
+
+    private void showDialogDelete(Anuncio anuncio) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(requireContext());
+        alertDialog.setTitle("Deseja excluir o anúncio?");
+        alertDialog.setMessage("Clique em 'Sim' para excluir o anúncio ou clique em 'Fechar'.");
+        alertDialog.setNegativeButton("Fechar", ((dialog, which) -> {
+            dialog.dismiss();
+            anuncioAdapter.notifyDataSetChanged();
+        })).setPositiveButton("Sim", ((dialog, which) -> {
+//            Intent intent = new Intent(requireActivity(), FormAnuncioActivity.class);
+//            intent.putExtra("anuncioSelecionado", anuncio);
+//            startActivity(intent);
+            anuncioList.remove(anuncio);
+            anuncio.remover();
 
             anuncioAdapter.notifyDataSetChanged();
         }));

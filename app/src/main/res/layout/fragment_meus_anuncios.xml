@@ -53,9 +53,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:leftBgColor="@color/blue"
-        app:leftImage="@drawable/ic_delete"
+        app:leftImage="@drawable/ic_edit"
         app:rightBgColor="@color/cor_delete"
-        app:rightImage="@drawable/ic_edit"
+        app:rightImage="@drawable/ic_delete"
         app:textColor="@android:color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

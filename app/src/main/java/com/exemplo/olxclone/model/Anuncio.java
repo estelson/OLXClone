@@ -8,6 +8,7 @@ import com.exemplo.olxclone.activities.MainActivity;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -67,6 +68,31 @@ public class Anuncio implements Serializable {
             activity.finish();
 
             Toast.makeText(activity, "Anúncio alterado com sucesso", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void remover() {
+        DatabaseReference anuncioPublicoRef = FirebaseHelper.getDatabaseReference()
+                .child("anuncios_publicos")
+                .child(this.getId());
+
+        anuncioPublicoRef.removeValue();
+
+        DatabaseReference meusAnunciosRef = FirebaseHelper.getDatabaseReference()
+                .child("meus_anuncios")
+                .child(FirebaseHelper.getUidFirebase())
+                .child(this.getId());
+
+        meusAnunciosRef.removeValue();
+
+        for (int i = 0; i < getUrlImagens().size(); i++) {
+            StorageReference storageReference = FirebaseHelper.getStorageReference()
+                    .child("imagens")
+                    .child("anuncios")
+                    .child(getId())
+                    .child("imagem" + i + ".jpeg");
+
+            storageReference.delete();
         }
     }
 
