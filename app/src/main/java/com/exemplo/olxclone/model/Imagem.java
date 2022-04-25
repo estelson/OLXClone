@@ -5,6 +5,9 @@ public class Imagem {
     private String caminhoImagem;
     private int index;
 
+    public Imagem() {
+    }
+
     public Imagem(String caminhoImagem, int index) {
         this.caminhoImagem = caminhoImagem;
         this.index = index;

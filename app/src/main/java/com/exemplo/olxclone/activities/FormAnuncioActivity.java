@@ -1,7 +1,6 @@
 package com.exemplo.olxclone.activities;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
@@ -107,7 +106,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
         iniciaComponentes();
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
+        if (bundle != null) {
             anuncio = (Anuncio) bundle.getSerializable("anuncioSelecionado");
 
             configDados();
@@ -150,7 +149,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
                     if (!descricao.isEmpty()) {
                         if (local != null) {
                             if (local.getLocalidade() != null) {
-                                if(anuncio == null) {
+                                if (anuncio == null) {
                                     anuncio = new Anuncio();
                                 }
 
@@ -161,7 +160,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
                                 anuncio.setDescricao(descricao);
                                 anuncio.setLocal(local);
 
-                                if(novoAnuncio) { // Inclusão
+                                if (novoAnuncio) { // Inclusão
                                     if (imagemUploadList.size() == 3) {
                                         for (int i = 0; i < imagemUploadList.size(); i++) {
                                             salvarImagemFirebase(imagemUploadList.get(i), i);
@@ -170,7 +169,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
                                         Toast.makeText(this, "Selecione 3 imagens para o anúncio", Toast.LENGTH_LONG).show();
                                     }
                                 } else { // Alteração
-                                    if(imagemUploadList.size() > 0) {
+                                    if (imagemUploadList.size() > 0) {
                                         for (int i = 0; i < imagemUploadList.size(); i++) {
                                             salvarImagemFirebase(imagemUploadList.get(i), i);
                                         }
@@ -212,15 +211,15 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
         UploadTask uploadTask = storageReference.putFile(Uri.parse(imagemUpload.getCaminhoImagem()));
         uploadTask.addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnCompleteListener(task -> {
-                if(novoAnuncio) {
-                    anuncio.getUrlImagens().add(index, task.getResult().toString());
-                } else {
-                    anuncio.getUrlImagens().set(imagemUpload.getIndex(), task.getResult().toString());
-                }
+            if (novoAnuncio) {
+                anuncio.getUrlImagens().add(task.getResult().toString());
+            } else {
+                anuncio.getUrlImagens().set(imagemUpload.getIndex(), task.getResult().toString());
+            }
 
-                if(imagemUploadList.size() == index + 1) {
-                    anuncio.salvar(this, novoAnuncio);
-                }
+            if (imagemUploadList.size() == index + 1) {
+                anuncio.salvar(this, novoAnuncio);
+            }
         })).addOnFailureListener(e -> Toast.makeText(this, "Erro ao gravar imagem" + index + ". Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
@@ -254,7 +253,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 enderecoUsuario = snapshot.getValue(Endereco.class);
-                if(novoAnuncio) {
+                if (novoAnuncio) {
                     edt_cep.setText(enderecoUsuario.getCep());
                 } else {
                     edt_cep.setText(anuncio.getLocal().getCep());
@@ -335,15 +334,15 @@ public class FormAnuncioActivity extends AppCompatActivity {
         Imagem imagemUpload = new Imagem(caminhoImagem, request);
 
         // Verifica se é uma nova imagem ou se está alterando a imagem existente
-        if(imagemUploadList.size() > 0) {
+        if (imagemUploadList.size() > 0) {
             boolean encontrou = false;
             for (int i = 0; i < imagemUploadList.size(); i++) {
-                if(imagemUploadList.get(i).getIndex() == request) {
+                if (imagemUploadList.get(i).getIndex() == request) {
                     encontrou = true;
                 }
             }
 
-            if(encontrou) {
+            if (encontrou) {
                 imagemUploadList.set(request, imagemUpload);
             } else {
                 imagemUploadList.add(imagemUpload);
@@ -567,7 +566,7 @@ public class FormAnuncioActivity extends AppCompatActivity {
             Bitmap bitmap2;
 
             Uri imagemSelecionada = null;
-            if(data != null) {
+            if (data != null) {
                 imagemSelecionada = data.getData();
             }
 
