@@ -39,6 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <android.widget.Button
+            android:id="@+id/btn_regioes"
             style="?attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,6 +55,7 @@
             android:layout_height="match_parent" />
 
         <android.widget.Button
+            android:id="@+id/btn_categorias"
             style="?attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,6 +71,7 @@
             android:layout_height="match_parent" />
 
         <android.widget.Button
+            android:id="@+id/btn_filtros"
             style="?attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

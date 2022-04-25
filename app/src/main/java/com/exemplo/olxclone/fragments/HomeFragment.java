@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.exemplo.olxclone.R;
+import com.exemplo.olxclone.activities.CategoriasActivity;
 import com.exemplo.olxclone.activities.FormAnuncioActivity;
 import com.exemplo.olxclone.adapter.AnuncioAdapter;
 import com.exemplo.olxclone.autenticacao.LoginActivity;
@@ -31,6 +32,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickListener {
+
+    private Button btn_regioes;
+    private Button btn_categorias;
+    private Button btn_filtros;
 
     private AnuncioAdapter anuncioAdapter;
     private List<Anuncio> anuncioList = new ArrayList<>();
@@ -112,9 +117,20 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
                 startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
+
+        btn_categorias.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), CategoriasActivity.class);
+            intent.putExtra("todas", true);
+
+            startActivity(intent);
+        });
     }
 
     private void iniciaComponentes(View view) {
+        btn_regioes = view.findViewById(R.id.btn_regioes);
+        btn_categorias = view.findViewById(R.id.btn_categorias);
+        btn_filtros = view.findViewById(R.id.btn_filtros);
+
         text_info = view.findViewById(R.id.text_info);
         rv_anuncios = view.findViewById(R.id.rv_anuncios);
 

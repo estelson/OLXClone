@@ -19,12 +19,19 @@ public class CategoriasActivity extends AppCompatActivity implements CategoriaAd
     
     private CategoriaAdapter categoriaAdapter;
 
+    private boolean todasCategorias = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorias);
 
         iniciaComponentes();
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            todasCategorias = (boolean) bundle.getSerializable("todas");
+        }
 
         configCliques();
 
@@ -35,7 +42,7 @@ public class CategoriasActivity extends AppCompatActivity implements CategoriaAd
         rv_categorias.setLayoutManager(new LinearLayoutManager(this));
         rv_categorias.setHasFixedSize(true);
         
-        categoriaAdapter = new CategoriaAdapter(CategoriaList.getList(false), this);
+        categoriaAdapter = new CategoriaAdapter(CategoriaList.getList(todasCategorias), this);
 
         rv_categorias.setAdapter(categoriaAdapter);
     }
