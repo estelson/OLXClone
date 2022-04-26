@@ -22,6 +22,7 @@
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_galeria.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_menu.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_senha.xml" value="0.229" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_seta_filtro.xml" value="0.2305" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_telefone.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_user.xml" value="0.229" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/drawable/ic_user_perfil.xml" value="0.229" />
@@ -34,6 +35,7 @@
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_criar_conta.xml" value="0.35833333333333334" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_endereco.xml" value="0.35833333333333334" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_estados.xml" value="0.22631578947368422" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_filtros.xml" value="0.22631578947368422" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_form_anuncio.xml" value="0.2241042345276873" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_login.xml" value="0.35833333333333334" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/activity_main.xml" value="0.2241042345276873" />
@@ -51,6 +53,7 @@
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/layout_bottom_sheet.xml" value="0.22631578947368422" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/regiao_item.xml" value="0.22631578947368422" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/toolbar.xml" value="0.35833333333333334" />
+        <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/layout/toolbar_filtros.xml" value="0.22631578947368422" />
         <entry key="..\:/Documents/Projects/Android/Cursos/Udemy/OLXClone/app/src/main/res/menu/bottom_nav_menu.xml" value="0.35833333333333334" />
       </map>
     </option>

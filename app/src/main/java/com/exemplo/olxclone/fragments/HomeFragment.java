@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.activities.CategoriasActivity;
 import com.exemplo.olxclone.activities.EstadosActivity;
+import com.exemplo.olxclone.activities.FiltrosActivity;
 import com.exemplo.olxclone.activities.FormAnuncioActivity;
 import com.exemplo.olxclone.adapter.AnuncioAdapter;
 import com.exemplo.olxclone.autenticacao.LoginActivity;
-import com.exemplo.olxclone.helper.EstadosList;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Anuncio;
 import com.google.firebase.database.DataSnapshot;
@@ -125,6 +125,10 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
             intent.putExtra("todas", true);
 
             startActivity(intent);
+        });
+
+        btn_filtros.setOnClickListener(v -> {
+            startActivity(new Intent(requireActivity(), FiltrosActivity.class));
         });
 
         btn_regioes.setOnClickListener(v -> {
