@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +24,10 @@ import com.exemplo.olxclone.activities.FormAnuncioActivity;
 import com.exemplo.olxclone.adapter.AnuncioAdapter;
 import com.exemplo.olxclone.autenticacao.LoginActivity;
 import com.exemplo.olxclone.helper.FirebaseHelper;
+import com.exemplo.olxclone.helper.SPFiltro;
 import com.exemplo.olxclone.model.Anuncio;
+import com.exemplo.olxclone.model.Categoria;
+import com.exemplo.olxclone.model.Filtro;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +38,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickListener {
+
+    private final int REQUEST_CATEGORIA = 100;
 
     private Button btn_regioes;
     private Button btn_categorias;
@@ -68,6 +74,24 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
         super.onStart();
 
         recuperaAnuncios();
+
+        configFiltros();
+    }
+
+    private void configFiltros() {
+        Filtro filtro = SPFiltro.getFiltro(requireActivity());
+
+        if(!filtro.getEstado().getRegiao().isEmpty()) {
+            btn_regioes.setText(filtro.getEstado().getRegiao());
+        } else {
+            btn_regioes.setText("Regiões");
+        }
+
+        if(!filtro.getCategoria().isEmpty()) {
+            btn_categorias.setText(filtro.getCategoria());
+        } else {
+            btn_categorias.setText("Categorias");
+        }
     }
 
     private void recuperaAnuncios() {
@@ -124,7 +148,7 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
             Intent intent = new Intent(requireActivity(), CategoriasActivity.class);
             intent.putExtra("todas", true);
 
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CATEGORIA);
         });
 
         btn_filtros.setOnClickListener(v -> {
@@ -153,4 +177,19 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
     public void OnClick(Anuncio anuncio) {
         Toast.makeText(requireContext(), anuncio.getTitulo(), Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == requireActivity().RESULT_OK){
+            if(requestCode == REQUEST_CATEGORIA){
+                Categoria categoriaSelecionada = (Categoria) data.getExtras().getSerializable("categoriaSelecionada");
+                SPFiltro.setFiltro(requireActivity(), "categoria", categoriaSelecionada.getNome());
+
+                configFiltros();
+            }
+        }
+    }
+
 }

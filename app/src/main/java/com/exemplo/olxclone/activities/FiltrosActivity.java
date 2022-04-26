@@ -83,6 +83,8 @@ public class FiltrosActivity extends AppCompatActivity {
     private void configCliques(){
         findViewById(R.id.btn_limpar).setOnClickListener(v -> {
             SPFiltro.limparFiltros(this);
+
+            finish();
         });
 
         findViewById(R.id.ib_voltar).setOnClickListener(v -> {
