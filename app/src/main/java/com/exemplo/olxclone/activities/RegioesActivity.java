@@ -1,17 +1,17 @@
 package com.exemplo.olxclone.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.exemplo.olxclone.R;
-import com.exemplo.olxclone.adapter.EstadoAdapter;
 import com.exemplo.olxclone.adapter.RegiaoAdapter;
 import com.exemplo.olxclone.helper.RegioesList;
+import com.exemplo.olxclone.helper.SPFiltro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +22,6 @@ public class RegioesActivity extends AppCompatActivity implements RegiaoAdapter.
 
     private RegiaoAdapter regiaoAdapter;
 
-    private String estadoSelecionado;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,30 +29,22 @@ public class RegioesActivity extends AppCompatActivity implements RegiaoAdapter.
 
         iniciaComponentes();
 
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
-            estadoSelecionado = (String) bundle.getSerializable("estadoSelecionado");
-        }
-
         configCliques();
 
         configRV();
     }
 
     private void configRV() {
-        List<String> regioesList = new ArrayList<>();
-        regioesList.add(estadoSelecionado);
-
         rv_regioes.setLayoutManager((new LinearLayoutManager(this)));
         rv_regioes.setHasFixedSize(true);
 
-        regiaoAdapter = new RegiaoAdapter(RegioesList.getList(estadoSelecionado), this);
+        regiaoAdapter = new RegiaoAdapter(RegioesList.getList(SPFiltro.getFiltro(this).getEstado().getUf()), this);
 
         rv_regioes.setAdapter(regiaoAdapter);
     }
 
     private void configCliques() {
-        findViewById(R.id.ib_voltar). setOnClickListener(v -> {
+        findViewById(R.id.ib_voltar).setOnClickListener(v -> {
             finish();
         });
     }

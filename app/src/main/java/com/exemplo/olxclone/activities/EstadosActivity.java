@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.adapter.EstadoAdapter;
 import com.exemplo.olxclone.helper.EstadosList;
+import com.exemplo.olxclone.helper.SPFiltro;
 import com.exemplo.olxclone.model.Estado;
 
 public class EstadosActivity extends AppCompatActivity implements EstadoAdapter.OnClickListener {
@@ -28,11 +29,11 @@ public class EstadosActivity extends AppCompatActivity implements EstadoAdapter.
 
         configRV();
 
-        configCiques();
+        configCliques();
     }
 
 
-    private void configCiques() {
+    private void configCliques() {
         findViewById(R.id.ib_voltar).setOnClickListener(v -> {
             finish();
         });
@@ -55,9 +56,9 @@ public class EstadosActivity extends AppCompatActivity implements EstadoAdapter.
 
     @Override
     public void OnCLick(Estado estado) {
-        Intent intent = new Intent(this, RegioesActivity.class);
-        intent.putExtra("estadoSelecionado", estado.getUf());
+        SPFiltro.setFiltro(this, "ufEstado", estado.getUf());
+        SPFiltro.setFiltro(this, "nomeEstado", estado.getNome());
 
-        startActivity(intent);
+        startActivity(new Intent(this, RegioesActivity.class));
     }
 }
