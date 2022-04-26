@@ -1,5 +1,6 @@
 package com.exemplo.olxclone.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,10 +23,17 @@ public class RegioesActivity extends AppCompatActivity implements RegiaoAdapter.
 
     private RegiaoAdapter regiaoAdapter;
 
+    private Boolean acesso = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regioes);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            acesso = bundle.getBoolean("filtros");
+        }
 
         iniciaComponentes();
 
@@ -58,6 +66,12 @@ public class RegioesActivity extends AppCompatActivity implements RegiaoAdapter.
 
     @Override
     public void OnCLick(String regiao) {
-        Toast.makeText(this, regiao, Toast.LENGTH_SHORT).show();
+        SPFiltro.setFiltro(this, "regiao", regiao);
+
+        if(acesso) {
+            finish();
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
 }

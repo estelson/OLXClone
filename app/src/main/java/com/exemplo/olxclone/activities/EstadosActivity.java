@@ -3,7 +3,6 @@ package com.exemplo.olxclone.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,10 +19,17 @@ public class EstadosActivity extends AppCompatActivity implements EstadoAdapter.
     private RecyclerView rv_estados;
     private EstadoAdapter estadoAdapter;
 
+    private Boolean acesso = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estados);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            acesso = bundle.getBoolean("filtros");
+        }
 
         iniciaComponentes();
 
@@ -56,9 +62,20 @@ public class EstadosActivity extends AppCompatActivity implements EstadoAdapter.
 
     @Override
     public void OnCLick(Estado estado) {
-        SPFiltro.setFiltro(this, "ufEstado", estado.getUf());
-        SPFiltro.setFiltro(this, "nomeEstado", estado.getNome());
+        if (!estado.getNome().equals("Brasil")) {
+            SPFiltro.setFiltro(this, "ufEstado", estado.getUf());
+            SPFiltro.setFiltro(this, "nomeEstado", estado.getNome());
 
-        startActivity(new Intent(this, RegioesActivity.class));
+            if (acesso) {
+                finish();
+            } else {
+                startActivity(new Intent(this, RegioesActivity.class));
+            }
+        } else {
+            SPFiltro.setFiltro(this, "ufEstado", "");
+            SPFiltro.setFiltro(this, "nomeEstado", "");
+
+            finish();
+        }
     }
 }
