@@ -3,7 +3,6 @@ package com.exemplo.olxclone.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,9 +12,6 @@ import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.adapter.RegiaoAdapter;
 import com.exemplo.olxclone.helper.RegioesList;
 import com.exemplo.olxclone.helper.SPFiltro;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RegioesActivity extends AppCompatActivity implements RegiaoAdapter.OnClickListener {
 
@@ -31,7 +27,7 @@ public class RegioesActivity extends AppCompatActivity implements RegiaoAdapter.
         setContentView(R.layout.activity_regioes);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
+        if (bundle != null) {
             acesso = bundle.getBoolean("filtros");
         }
 
@@ -66,9 +62,15 @@ public class RegioesActivity extends AppCompatActivity implements RegiaoAdapter.
 
     @Override
     public void OnCLick(String regiao) {
-        SPFiltro.setFiltro(this, "regiao", regiao);
+        if (!regiao.equals("Todas as regiões")) {
+            SPFiltro.setFiltro(this, "ddd", regiao.substring(4, 6));
+            SPFiltro.setFiltro(this, "regiao", regiao);
+        } else {
+            SPFiltro.setFiltro(this, "ddd", "");
+            SPFiltro.setFiltro(this, "regiao", "");
+        }
 
-        if(acesso) {
+        if (acesso) {
             finish();
         } else {
             startActivity(new Intent(this, MainActivity.class));

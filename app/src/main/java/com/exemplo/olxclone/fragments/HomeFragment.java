@@ -41,6 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickListener {
 
@@ -52,6 +53,8 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
     private Button btn_regioes;
     private Button btn_categorias;
     private Button btn_filtros;
+
+    private Filtro filtro = new Filtro();
 
     private AnuncioAdapter anuncioAdapter;
     private List<Anuncio> anuncioList = new ArrayList<>();
@@ -82,8 +85,6 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
     @Override
     public void onStart() {
         super.onStart();
-
-        recuperaAnuncios();
 
         configFiltros();
     }
@@ -127,7 +128,7 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
     }
 
     private void configFiltros() {
-        Filtro filtro = SPFiltro.getFiltro(requireActivity());
+        filtro = SPFiltro.getFiltro(requireActivity());
 
         if(!filtro.getEstado().getRegiao().isEmpty()) {
             btn_regioes.setText(filtro.getEstado().getRegiao());
@@ -140,6 +141,8 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
         } else {
             btn_categorias.setText("Categorias");
         }
+
+        recuperaAnuncios();
     }
 
     private void recuperaAnuncios() {
@@ -155,6 +158,62 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Anuncio anuncio = ds.getValue(Anuncio.class);
                         anuncioList.add(anuncio);
+                    }
+
+                    // Filtro por Categoria
+                    if(!filtro.getCategoria().isEmpty()) {
+                        if(!filtro.getCategoria().equals("Todas as categorias")) {
+                            for(Anuncio anuncio : new ArrayList<>(anuncioList)) {
+                                if(!anuncio.getCategoria().equals(filtro.getCategoria())) {
+                                    anuncioList.remove(anuncio);
+                                }
+                            }
+                        }
+                    }
+
+                    // Filtro por Estado
+                    if(!filtro.getEstado().getUf().isEmpty()) {
+                        for(Anuncio anuncio : new ArrayList<>(anuncioList)) {
+                            if(!anuncio.getLocal().getUf().contains(filtro.getEstado().getUf())) {
+                                anuncioList.remove(anuncio);
+                            }
+                        }
+                    }
+
+                    // Filtro por DDD
+                    if(!filtro.getEstado().getDdd().isEmpty()) {
+                        for(Anuncio anuncio : new ArrayList<>(anuncioList)) {
+                            if(!anuncio.getLocal().getUf().equals(filtro.getEstado().getUf())) {
+                                anuncioList.remove(anuncio);
+                            }
+                        }
+                    }
+
+                    // Filtro por nome pesquisado na barra de pesquisa
+                    if(!filtro.getPesquisa().isEmpty()) {
+                        for(Anuncio anuncio : new ArrayList<>(anuncioList)) {
+                            if(!anuncio.getTitulo().toLowerCase().contains(filtro.getPesquisa().toLowerCase())) {
+                                anuncioList.remove(anuncio);
+                            }
+                        }
+                    }
+
+                    // Filtro por valor mínimo
+                    if(filtro.getValorMin() > 0) {
+                        for(Anuncio anuncio : new ArrayList<>(anuncioList)) {
+                            if(anuncio.getValor() < filtro.getValorMin()) {
+                                anuncioList.remove(anuncio);
+                            }
+                        }
+                    }
+
+                    // Filtro por valor máximo
+                    if(filtro.getValorMax() > 0) {
+                        for(Anuncio anuncio : new ArrayList<>(anuncioList)) {
+                            if(anuncio.getValor() > filtro.getValorMax()) {
+                                anuncioList.remove(anuncio);
+                            }
+                        }
                     }
 
                     text_info.setText("");

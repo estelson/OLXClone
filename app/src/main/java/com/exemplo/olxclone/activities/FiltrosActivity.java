@@ -67,17 +67,17 @@ public class FiltrosActivity extends AppCompatActivity {
             btn_regioes.setText("Todas as regiões");
         }
 
-//        if(filtro.getValorMin() > 0){
-//            edt_valor_min.setValue(filtro.getValorMin() * 100);
-//        }else {
-//            edt_valor_min.setValue(0);
-//        }
-//
-//        if(filtro.getValorMax() > 0){
-//            edt_valor_max.setValue(filtro.getValorMax() * 100);
-//        }else {
-//            edt_valor_max.setValue(0);
-//        }
+        if(filtro.getValorMin() > 0){
+            edt_valor_min.setValue(filtro.getValorMin() * 100);
+        }else {
+            edt_valor_min.setValue(0);
+        }
+
+        if(filtro.getValorMax() > 0){
+            edt_valor_max.setValue(filtro.getValorMax() * 100);
+        }else {
+            edt_valor_max.setValue(0);
+        }
     }
 
     private void configCliques(){
