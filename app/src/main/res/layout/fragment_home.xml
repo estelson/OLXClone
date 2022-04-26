@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,6 +24,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24sp"
             android:layout_marginBottom="16sp"
+            app:queryHint="Estou procurando por..."
+            app:iconifiedByDefault="false"
+            app:queryBackground="@android:color/transparent"
             android:background="@drawable/bg_search_view"
             android:imeOptions="actionSearch" />
 

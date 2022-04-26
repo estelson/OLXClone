@@ -1,17 +1,22 @@
 package com.exemplo.olxclone.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +46,9 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
 
     private final int REQUEST_CATEGORIA = 100;
 
+    private SearchView search_view;
+    private EditText edit_search_view;
+
     private Button btn_regioes;
     private Button btn_categorias;
     private Button btn_filtros;
@@ -66,6 +74,8 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
 
         configCliques();
 
+        configSearchView();
+
         return view;
     }
 
@@ -76,6 +86,44 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
         recuperaAnuncios();
 
         configFiltros();
+    }
+
+    private void configSearchView() {
+        edit_search_view = search_view.findViewById(androidx.appcompat.R.id.search_src_text);
+
+        search_view.findViewById(androidx.appcompat.R.id.search_close_btn).setOnClickListener(v -> {
+            limparPesquisa();
+        });
+
+        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                SPFiltro.setFiltro(requireActivity(), "pesquisa", query);
+
+                configFiltros();
+
+                ocultarTeclado();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private void limparPesquisa() {
+        search_view.clearFocus();
+
+        edit_search_view.setText("");
+
+        SPFiltro.setFiltro(requireActivity(), "pesquisa", "");
+
+        configFiltros();
+
+        ocultarTeclado();
     }
 
     private void configFiltros() {
@@ -161,6 +209,8 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
     }
 
     private void iniciaComponentes(View view) {
+        search_view = view.findViewById(R.id.search_view);
+
         btn_regioes = view.findViewById(R.id.btn_regioes);
         btn_categorias = view.findViewById(R.id.btn_categorias);
         btn_filtros = view.findViewById(R.id.btn_filtros);
@@ -171,6 +221,11 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
         progressBar = view.findViewById(R.id.progressBar);
 
         btn_novo_anuncio = view.findViewById(R.id.btn_novo_anuncio);
+    }
+
+    private void ocultarTeclado() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(search_view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     @Override
