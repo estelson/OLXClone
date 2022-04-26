@@ -1,5 +1,6 @@
 package com.exemplo.olxclone.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,9 @@ public class EstadosActivity extends AppCompatActivity implements EstadoAdapter.
 
     @Override
     public void OnCLick(Estado estado) {
-        Toast.makeText(this, estado.getNome(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, RegioesActivity.class);
+        intent.putExtra("estadoSelecionado", estado.getUf());
+
+        startActivity(intent);
     }
 }

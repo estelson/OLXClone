@@ -1,6 +1,8 @@
 package com.exemplo.olxclone.model;
 
-public class Estado {
+import java.io.Serializable;
+
+public class Estado implements Serializable {
 
     private String uf;
     private String regiao;
