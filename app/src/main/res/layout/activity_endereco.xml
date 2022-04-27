@@ -46,14 +46,18 @@
                         android:text="CEP"
                         android:textColor="@color/cor_roxa"/>
 
-                    <EditText
-                        android:id="@+id/id_cep"
+                    <com.santalu.maskara.widget.MaskEditText
+                        android:id="@+id/edt_cep"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="CEP"
                         android:background="@drawable/bg_edt"
+                        android:hint="CEP"
+                        android:inputType="number"
+                        android:layout_marginTop="8dp"
                         android:padding="16dp"
-                        android:layout_marginTop="8dp"/>
+                        app:mask="_____-___"
+                        app:maskCharacter="_"
+                        app:maskStyle="completable" />
                 </LinearLayout>
 
                 <LinearLayout

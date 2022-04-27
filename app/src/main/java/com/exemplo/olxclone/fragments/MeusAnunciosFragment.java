@@ -20,6 +20,7 @@ import com.exemplo.olxclone.activities.FormAnuncioActivity;
 import com.exemplo.olxclone.adapter.AnuncioAdapter;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Anuncio;
+import com.exemplo.olxclone.model.Favorito;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,11 +81,13 @@ public class MeusAnunciosFragment extends Fragment implements AnuncioAdapter.OnC
 
                         Collections.reverse(anuncioList);
                         anuncioAdapter.notifyDataSetChanged();
-
-                        progressBar.setVisibility(View.GONE);
                     } else {
+                        anuncioList.clear();
+
                         text_info.setText("Nenhum anúncio cadastrado");
                     }
+
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -147,9 +150,8 @@ public class MeusAnunciosFragment extends Fragment implements AnuncioAdapter.OnC
             dialog.dismiss();
             anuncioAdapter.notifyDataSetChanged();
         })).setPositiveButton("Sim", ((dialog, which) -> {
-//            Intent intent = new Intent(requireActivity(), FormAnuncioActivity.class);
-//            intent.putExtra("anuncioSelecionado", anuncio);
-//            startActivity(intent);
+            //TODO: Excluir favoritos deste anúncio
+
             anuncioList.remove(anuncio);
             anuncio.remover();
 

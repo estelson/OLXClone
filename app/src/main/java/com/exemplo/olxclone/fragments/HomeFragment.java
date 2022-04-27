@@ -221,11 +221,12 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
 
                     Collections.reverse(anuncioList);
                     anuncioAdapter.notifyDataSetChanged();
-
-                    progressBar.setVisibility(View.GONE);
                 } else {
                     text_info.setText("Nenhum anúncio cadastrado");
+
                 }
+
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override

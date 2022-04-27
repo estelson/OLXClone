@@ -17,10 +17,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.santalu.maskara.widget.MaskEditText;
 
 public class EnderecoActivity extends AppCompatActivity {
 
-    private EditText edt_cep;
+    private MaskEditText edt_cep;
     private EditText edt_uf;
     private EditText edt_municipio;
     private EditText edt_bairro;
@@ -37,41 +38,55 @@ public class EnderecoActivity extends AppCompatActivity {
         iniciaComponentes();
 
         recuperaEndereco();
+
+        configCliques();
+    }
+
+    private void configCliques() {
+        findViewById(R.id.ib_voltar).setOnClickListener(v -> {
+            finish();
+        });
     }
 
     public void validaDados(View view) {
-        String cep = edt_cep.getText().toString().trim();
+        String cep = edt_cep.getMasked().trim();
         String uf = edt_uf.getText().toString().trim();
         String minicipio = edt_municipio.getText().toString().trim();
         String bairro = edt_bairro.getText().toString().trim();
 
         if(!cep.isEmpty()) {
-            if(!uf.isEmpty()) {
-                if(!minicipio.isEmpty()) {
-                    if(!bairro.isEmpty()) {
-                        progressBar.setVisibility(View.VISIBLE);
 
-                        if(endereco == null) {
-                            endereco = new Endereco();
+            if(cep.length() == 9) {
+                if(!uf.isEmpty()) {
+                    if(!minicipio.isEmpty()) {
+                        if(!bairro.isEmpty()) {
+                            progressBar.setVisibility(View.VISIBLE);
+
+                            if(endereco == null) {
+                                endereco = new Endereco();
+                            }
+
+                            endereco.setCep(cep);
+                            endereco.setUf(uf);
+                            endereco.setMinicipio(minicipio);
+                            endereco.setBairro(bairro);
+
+                            endereco.salvar(FirebaseHelper.getUidFirebase(), getBaseContext(), progressBar);
+                        } else {
+                            edt_bairro.requestFocus();
+                            edt_bairro.setError("Informe o bairro");
                         }
-
-                        endereco.setCep(cep);
-                        endereco.setUf(uf);
-                        endereco.setMinicipio(minicipio);
-                        endereco.setBairro(bairro);
-
-                        endereco.salvar(FirebaseHelper.getUidFirebase(), getBaseContext(), progressBar);
                     } else {
-                        edt_bairro.requestFocus();
-                        edt_bairro.setError("Informe o bairro");
+                        edt_municipio.requestFocus();
+                        edt_municipio.setError("Informe o município");
                     }
                 } else {
-                    edt_municipio.requestFocus();
-                    edt_municipio.setError("Informe o município");
+                    edt_uf.requestFocus();
+                    edt_uf.setError("Informe a UF");
                 }
             } else {
-                edt_uf.requestFocus();
-                edt_uf.setError("Informe a UF");
+                edt_cep.requestFocus();
+                edt_cep.setError("Informe um CEP válido");
             }
         } else {
             edt_cep.requestFocus();
@@ -120,7 +135,7 @@ public class EnderecoActivity extends AppCompatActivity {
         TextView text_toolbar = findViewById(R.id.text_toolbar);
         text_toolbar.setText("Endereço");
 
-        edt_cep = findViewById(R.id.id_cep);
+        edt_cep = findViewById(R.id.edt_cep);
         edt_uf = findViewById(R.id.edt_uf);
         edt_municipio = findViewById(R.id.edt_municipio);
         edt_bairro = findViewById(R.id.edt_bairro);

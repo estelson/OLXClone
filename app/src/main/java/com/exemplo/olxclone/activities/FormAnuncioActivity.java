@@ -87,6 +87,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
 
     private TextView txt_local;
 
+    private Button btn_salvar;
+
     private Endereco enderecoUsuario;
 
     private Local local;
@@ -174,6 +176,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
                                             salvarImagemFirebase(imagemUploadList.get(i), i);
                                         }
                                     } else {
+                                        btn_salvar.setText("Aguarde...");
+
                                         anuncio.salvar(this, false);
                                     }
                                 }
@@ -203,6 +207,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
     }
 
     private void salvarImagemFirebase(Imagem imagemUpload, int index) {
+        btn_salvar.setText("Aguarde...");
+
         StorageReference storageReference = FirebaseHelper.getStorageReference()
                 .child("imagens")
                 .child("anuncios")
@@ -224,6 +230,10 @@ public class FormAnuncioActivity extends AppCompatActivity {
     }
 
     private void configCliques() {
+        findViewById(R.id.ib_voltar).setOnClickListener(v -> {
+            finish();
+        });
+
         imagem0.setOnClickListener(v -> {
             showBottomDialog(0);
         });
@@ -252,14 +262,21 @@ public class FormAnuncioActivity extends AppCompatActivity {
         enderecoRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                enderecoUsuario = snapshot.getValue(Endereco.class);
-                if (novoAnuncio) {
-                    edt_cep.setText(enderecoUsuario.getCep());
-                } else {
-                    edt_cep.setText(anuncio.getLocal().getCep());
-                }
+                if(snapshot.exists()) {
 
-                progressBar.setVisibility(View.GONE);
+                    enderecoUsuario = snapshot.getValue(Endereco.class);
+                    if (novoAnuncio) {
+                        edt_cep.setText(enderecoUsuario.getCep());
+                    } else {
+                        edt_cep.setText(anuncio.getLocal().getCep());
+                    }
+
+                    progressBar.setVisibility(View.GONE);
+                } else {
+                    finish();
+
+                    startActivity(new Intent(getBaseContext(), EnderecoActivity.class));
+                }
             }
 
             @Override
@@ -554,6 +571,8 @@ public class FormAnuncioActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         txt_local = findViewById(R.id.txt_local);
+
+        btn_salvar = findViewById(R.id.btn_salvar);
     }
 
     @Override

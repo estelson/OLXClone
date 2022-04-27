@@ -61,6 +61,9 @@ public class FavoritosFragment extends Fragment implements AnuncioAdapter.OnClic
     }
 
     private void recuperaFavoritos() {
+        favoritosList.clear();
+        anuncioList.clear();
+
         if (FirebaseHelper.getAutenticado()) {
             DatabaseReference favoritosRef = FirebaseHelper.getDatabaseReference()
                     .child("favoritos")

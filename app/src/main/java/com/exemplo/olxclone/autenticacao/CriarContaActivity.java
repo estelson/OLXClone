@@ -14,12 +14,13 @@ import com.exemplo.olxclone.activities.MainActivity;
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.model.Usuario;
+import com.santalu.maskara.widget.MaskEditText;
 
 public class CriarContaActivity extends AppCompatActivity {
 
     private EditText edt_nome;
     private EditText edt_email;
-    private EditText edt_telefone;
+    private MaskEditText edt_telefone;
     private EditText edt_senha;
 
     private ProgressBar progressBar;
@@ -43,25 +44,30 @@ public class CriarContaActivity extends AppCompatActivity {
     public void validaDados(View view) {
         String nome = edt_nome.getText().toString();
         String email = edt_email.getText().toString();
-        String telefone = edt_telefone.getText().toString();
+        String telefone = edt_telefone.getUnMasked();
         String senha = edt_senha.getText().toString();
 
         if(!nome.isEmpty()) {
             if(!email.isEmpty()) {
                 if(!telefone.isEmpty()) {
-                    if(!senha.isEmpty()) {
-                        progressBar.setVisibility(View.VISIBLE);
+                    if(telefone.length() == 11) {
+                        if(!senha.isEmpty()) {
+                            progressBar.setVisibility(View.VISIBLE);
 
-                        Usuario usuario = new Usuario();
-                        usuario.setNome(nome.trim());
-                        usuario.setEmail(email.trim());
-                        usuario.setTelefone(telefone.trim());
-                        usuario.setSenha(senha.trim());
+                            Usuario usuario = new Usuario();
+                            usuario.setNome(nome.trim());
+                            usuario.setEmail(email.trim());
+                            usuario.setTelefone(telefone.trim());
+                            usuario.setSenha(senha.trim());
 
-                        cadastrarUsuario(usuario);
+                            cadastrarUsuario(usuario);
+                        } else {
+                            edt_senha.requestFocus();
+                            edt_senha.setError("Informe a senha");
+                        }
                     } else {
-                        edt_senha.requestFocus();
-                        edt_senha.setError("Informe a senha");
+                        edt_telefone.requestFocus();
+                        edt_telefone.setError("Informe um telefone válido");
                     }
                 } else {
                     edt_telefone.requestFocus();

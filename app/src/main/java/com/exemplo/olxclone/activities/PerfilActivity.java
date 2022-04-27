@@ -97,7 +97,7 @@ public class PerfilActivity extends AppCompatActivity {
                 String urlImagem = task.getResult().toString();
                 usuario.setImagemPerfil(urlImagem);
 
-                usuario.salvar(progressBar, "Imagem do perfil atualizada com sucesso", getBaseContext());
+                usuario.salvar(progressBar, "Perfil atualizado com sucesso", getBaseContext());
 
                 caminhoImagem = null;
             });
@@ -105,7 +105,6 @@ public class PerfilActivity extends AppCompatActivity {
             Toast.makeText(this, "Erro ao atualizar imagem do perfil. Motivo: " + e.getMessage(), Toast.LENGTH_LONG).show();
         });
     }
-
 
     private void configDados() {
         edt_nome.setText(usuario.getNome());
@@ -150,6 +149,10 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     private void configCliques() {
+        findViewById(R.id.ib_voltar).setOnClickListener(v -> {
+            finish();
+        });
+
         imagem_perfil.setOnClickListener(v -> {
             verificaPermissaoGaleria();
         });
