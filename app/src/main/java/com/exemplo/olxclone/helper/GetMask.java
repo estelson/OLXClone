@@ -16,7 +16,7 @@ public class GetMask {
     public static String getDate(long dataPublicacao, int tipo) {
         final int DIA_MES_ANO = 1; // Ex. 31/12/2022
         final int HORA_MINUTO = 2; // Ex. 22:00
-        final int DIA_MES_ANO_HORA_MINUTO = 3; // Ex. 31/12/2022 22:00
+        final int DIA_MES_ANO_HORA_MINUTO = 3; // Ex. 31/12/2022 às 22:00
         final int DIA_MES = 4; // Ex. 31 de Janeiro
 
         Locale locale = new Locale("PT", "br");
@@ -100,7 +100,7 @@ public class GetMask {
                 time = hora + ":" + minuto;
                 break;
             case DIA_MES_ANO_HORA_MINUTO:
-                time = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto;
+                time = dia + "/" + mes + "/" + ano + " às " + hora + ":" + minuto;
                 break;
             case DIA_MES:
                 time = dia + " de " + mes ;

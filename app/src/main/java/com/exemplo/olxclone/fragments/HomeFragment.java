@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.activities.CategoriasActivity;
+import com.exemplo.olxclone.activities.DetalhesAnuncioActivity;
 import com.exemplo.olxclone.activities.EstadosActivity;
 import com.exemplo.olxclone.activities.FiltrosActivity;
 import com.exemplo.olxclone.activities.FormAnuncioActivity;
@@ -289,7 +290,10 @@ public class HomeFragment extends Fragment implements AnuncioAdapter.OnClickList
 
     @Override
     public void OnClick(Anuncio anuncio) {
-        Toast.makeText(requireContext(), anuncio.getTitulo(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(requireContext(), DetalhesAnuncioActivity.class);
+        intent.putExtra("anuncioSelecionado", anuncio);
+
+        startActivity(intent);
     }
 
     @Override
