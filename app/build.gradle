@@ -63,10 +63,6 @@ dependencies {
     // https://github.com/square/picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    // Biblioteca que adiciona a função de SWIPE em uma lista
-    // https://github.com/tsuryo/Swipeable-RecyclerView
-    implementation 'com.github.tsuryo:Swipeable-RecyclerView:1.1'
-
     // Format text fields without getting affected by input filters
     // https://github.com/santalu/maskara
     implementation 'com.github.santalu:maskara:1.0.0'
@@ -85,5 +81,10 @@ dependencies {
     // Android Image Slider
     // https://github.com/smarteist/Android-Image-Slider
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
+
+    // Library that allows you to create a button with animation effects similar to Twitter's heart
+    // when you like something
+    //https://github.com/jd-alexander/LikeButton
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
 }

@@ -39,19 +39,17 @@
             app:layout_constraintTop_toTopOf="parent"
             android:text="Detalhes" />
 
-        <ImageButton
-            android:id="@+id/ib_favorito"
-            android:layout_width="wrap_content"
+        <com.like.LikeButton
+            android:id="@+id/like_button"
+            android:layout_width="35dp"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:src="@drawable/ic_favorito_off"
+            app:icon_size="25dp"
+            app:icon_type="heart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ib_ligar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_editor_absoluteX="157dp"
-            app:tint="@android:color/white" />
+            app:like_drawable="@drawable/like_button_on"
+            app:unlike_drawable="@drawable/like_button_off" />
 
         <ImageButton
             android:id="@+id/ib_ligar"

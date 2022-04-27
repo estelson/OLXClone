@@ -1,13 +1,16 @@
 package com.exemplo.olxclone.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.exemplo.olxclone.R;
 import com.exemplo.olxclone.adapter.SliderAdapter;
@@ -15,14 +18,21 @@ import com.exemplo.olxclone.autenticacao.LoginActivity;
 import com.exemplo.olxclone.helper.FirebaseHelper;
 import com.exemplo.olxclone.helper.GetMask;
 import com.exemplo.olxclone.model.Anuncio;
+import com.exemplo.olxclone.model.Favorito;
 import com.exemplo.olxclone.model.Usuario;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetalhesAnuncioActivity extends AppCompatActivity {
 
@@ -30,7 +40,7 @@ public class DetalhesAnuncioActivity extends AppCompatActivity {
 
     private TextView text_toolbar;
 
-    private ImageButton ib_favorito;
+    private LikeButton like_button;
     private ImageButton ib_ligar;
 
     private SliderView sliderView;
@@ -51,6 +61,8 @@ public class DetalhesAnuncioActivity extends AppCompatActivity {
 
     private Usuario usuario;
 
+    private List<String> favoritosList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +71,7 @@ public class DetalhesAnuncioActivity extends AppCompatActivity {
         iniciaComponentes();
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null) {
+        if (bundle != null) {
             anuncio = (Anuncio) bundle.getSerializable("anuncioSelecionado");
 
             configDados();
@@ -67,7 +79,105 @@ public class DetalhesAnuncioActivity extends AppCompatActivity {
             recuperaUsuario();
         }
 
+        configLikeButton();
+
+        recuperaFavoritos();
+
         configCliques();
+    }
+
+    private void configLikeButton() {
+        like_button.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                if (FirebaseHelper.getAutenticado()) {
+                    configSnackBar("", "Anúncio adicionado dos favoritos", R.drawable.like_button_on_red, true);
+                } else {
+                    likeButton.setLiked(false);
+                    alertAutenticacao("Para adicionar este anúncio a sua lista de favoritos é preciso estar autenticado no app. Deseja fazer isso agora?");
+                }
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                configSnackBar("DESFAZER", "Anúncio removido dos favoritos", R.drawable.like_button_off, false);
+            }
+        });
+    }
+
+    private void configSnackBar(String actionMsg, String msg, int icon, Boolean like) {
+        configFavoritos(like);
+
+        Snackbar snackbar = Snackbar.make(like_button, msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(actionMsg, v -> {
+            if (!like) {
+                configFavoritos(true);
+            }
+        });
+
+        TextView text_snack_bar = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+        text_snack_bar.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
+        text_snack_bar.setCompoundDrawablePadding(24);
+
+        snackbar.setActionTextColor(Color.parseColor("#F78323"));
+        snackbar.setTextColor(Color.parseColor("#FFFFFF"));
+
+        snackbar.show();
+    }
+
+    private void recuperaFavoritos() {
+        if (FirebaseHelper.getAutenticado()) {
+            DatabaseReference favoritosRef = FirebaseHelper.getDatabaseReference()
+                    .child("favoritos")
+                    .child(FirebaseHelper.getUidFirebase());
+
+            favoritosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        favoritosList.add(ds.getValue(String.class));
+                    }
+
+                    if (favoritosList.contains(anuncio.getId())) {
+                        like_button.setLiked(true);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+    }
+
+    private void configFavoritos(Boolean like) {
+        if (like) {
+            like_button.setLiked(true);
+            favoritosList.add(anuncio.getId());
+        } else {
+            like_button.setLiked(false);
+            favoritosList.remove(anuncio.getId());
+        }
+
+        Favorito favorito = new Favorito();
+        favorito.setFavoritos(favoritosList);
+
+        favorito.salvar();
+    }
+
+    private void alertAutenticacao(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Você não está autenticado");
+        builder.setMessage(msg);
+        builder.setNegativeButton("Não", ((dialog, which) -> {
+            dialog.dismiss();
+        })).setPositiveButton("Sim", ((dialog, which) -> {
+            startActivity(new Intent(this, LoginActivity.class));
+        }));
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void configCliques() {
@@ -81,7 +191,7 @@ public class DetalhesAnuncioActivity extends AppCompatActivity {
     }
 
     private void ligarAnunciante() {
-        if(FirebaseHelper.getAutenticado()) {
+        if (FirebaseHelper.getAutenticado()) {
             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", usuario.getTelefone(), null));
 
             startActivity(intent);
@@ -132,7 +242,7 @@ public class DetalhesAnuncioActivity extends AppCompatActivity {
 
         text_toolbar = findViewById(R.id.text_toolbar);
 
-        ib_favorito = findViewById(R.id.ib_favorito);
+        like_button = findViewById(R.id.like_button);
         ib_ligar = findViewById(R.id.ib_ligar);
 
         sliderView = findViewById(R.id.sliderView);
