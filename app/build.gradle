@@ -82,4 +82,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
+    // Android Image Slider
+    // https://github.com/smarteist/Android-Image-Slider
+    implementation 'com.github.smarteist:autoimageslider:1.4.0'
+
 }
